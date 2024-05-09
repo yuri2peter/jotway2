@@ -1,4 +1,3 @@
-import { Center, Title } from '@mantine/core';
 import React from 'react';
 import MyAppShell from './AppShell';
 

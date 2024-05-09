@@ -43,6 +43,9 @@
     "node": ">=16.0.0"
   },
   "dependencies": {
+    "@blocknote/core": "^0.13.0",
+    "@blocknote/mantine": "^0.13.1",
+    "@blocknote/react": "^0.13.1",
     "@koa/cors": "^5.0.0",
     "@mantine/carousel": "^7.4.1",
     "@mantine/code-highlight": "^7.4.1",

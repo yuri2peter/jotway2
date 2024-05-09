@@ -2,7 +2,7 @@ import React from 'react';
 import { APP_NAME } from 'src/common/config';
 import { Text, Image } from '@mantine/core';
 
-const Header: React.FC<{}> = () => {
+const AppHeader: React.FC<{}> = () => {
   return (
     <>
       <Image visibleFrom="sm" src="/assets/icon.png" h={32} />
@@ -13,4 +13,4 @@ const Header: React.FC<{}> = () => {
   );
 };
 
-export default Header;
+export default AppHeader;
