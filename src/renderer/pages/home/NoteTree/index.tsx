@@ -11,14 +11,25 @@ import CustomNode from './CustomNode';
 import { ROOT_ID, TreeData } from './defines';
 import CustomDragPreview from './CustomDragPreview';
 import Placeholder from './Placeholder';
+import { Box } from '@mantine/core';
 
-const NoteTree: React.FC<{}> = () => {
+const NoteTreeContent: React.FC<{ containerRef: HTMLElement }> = ({
+  containerRef,
+}) => {
   const [treeData, setTreeData] = useState(SampleData as TreeData);
   const handleDrop = (newTree: TreeData) => {
     setTreeData(newTree);
   };
   return (
-    <DndProvider backend={MultiBackend} options={getBackendOptions()}>
+    <DndProvider
+      backend={MultiBackend}
+      options={getBackendOptions({
+        touch: {},
+        html5: {
+          rootElement: containerRef,
+        },
+      })}
+    >
       <Tree
         tree={treeData}
         rootId={ROOT_ID}
@@ -56,6 +67,21 @@ const NoteTree: React.FC<{}> = () => {
         )}
       />
     </DndProvider>
+  );
+};
+
+const NoteTree: React.FC<{}> = () => {
+  const [ref, setRef] = useState<HTMLDivElement | null>(null);
+  return (
+    <Box
+      ref={(r) => {
+        if (r) {
+          setRef(r);
+        }
+      }}
+    >
+      {ref && <NoteTreeContent containerRef={ref} />}
+    </Box>
   );
 };
 

@@ -60,15 +60,15 @@ const TodoList: React.FC<{}> = () => {
             <Text c="gray">Tools</Text>
             <Text>To-Do List</Text>
           </Breadcrumbs>
-          <Group>
-            <IconListCheck size={32} />
-            <Text size={'32px'}>To-Do List</Text>
-            <FlexGrow />
-            <AddTask onClick={handleAddTask} />
-          </Group>
         </Stack>
       }
     >
+      <Group mb={'lg'}>
+        <IconListCheck size={32} />
+        <Text size={'32px'}>To-Do List</Text>
+        <FlexGrow />
+        <AddTask onClick={handleAddTask} />
+      </Group>
       {values.length === 0 && <Text c="dimmed">No Item</Text>}
       <Stack gap={'lg'}>
         {values.map((item) => (

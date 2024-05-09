@@ -1,9 +1,9 @@
 import React from 'react';
-import { AppShell, Box, Burger, Group } from '@mantine/core';
+import { AppShell, Burger, Group } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import Header from '../Header';
+import AppHeader from '../AppHeader';
 import NavBar from '../Navbar';
-import TodoList from '../TodoList';
+import AppMain from '../AppMain';
 
 const MyAppShell: React.FC<{}> = () => {
   const [opened, { toggle }] = useDisclosure(false);
@@ -23,14 +23,14 @@ const MyAppShell: React.FC<{}> = () => {
             size="sm"
             color="dimmed"
           />
-          <Header />
+          <AppHeader />
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p="md">
         <NavBar />
       </AppShell.Navbar>
       <AppShell.Main style={{ height: '100dvh', overflow: 'hidden' }}>
-        <TodoList />
+        <AppMain />
       </AppShell.Main>
     </AppShell>
   );

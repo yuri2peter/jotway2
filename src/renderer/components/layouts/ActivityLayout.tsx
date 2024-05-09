@@ -7,16 +7,16 @@ const ActivityLayout: React.FC<{
   header?: React.ReactNode;
 }> = ({ header, children, maxWidth }) => {
   return (
-    <Stack
-      gap="xl"
-      h={'100%'}
-      style={{ overflow: 'auto' }}
-      maw={maxWidth}
-      miw={'30%'}
-      mx={'auto'}
-    >
+    <Stack gap="xl" h={'100%'} style={{ overflow: 'auto' }}>
       <Box style={{ flexShrink: 0 }}>{header}</Box>
-      <Box style={{ flexGrow: 1, overflow: 'auto' }}>{children}</Box>
+      <Box
+        style={{ flexGrow: 1, overflow: 'auto' }}
+        maw={maxWidth}
+        w={'100%'}
+        mx={'auto'}
+      >
+        {children}
+      </Box>
     </Stack>
   );
 };

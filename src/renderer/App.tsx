@@ -6,6 +6,8 @@ import '@mantine/notifications/styles.css';
 import '@mantine/spotlight/styles.css';
 import '@mantine/carousel/styles.css';
 import '@mantine/nprogress/styles.css';
+import '@blocknote/core/fonts/inter.css';
+import '@blocknote/mantine/style.css';
 import './App.css';
 import React from 'react';
 import { MantineProvider } from '@mantine/core';
