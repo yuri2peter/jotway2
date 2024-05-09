@@ -1,0 +1,6 @@
+.root {
+  :global .mantine-NavLink-root {
+    padding-top: rem(4px);
+    padding-bottom: rem(4px);
+  }
+}

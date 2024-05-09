@@ -14,6 +14,10 @@ const dbInstance = new JsonDb({
   version,
   defaultValue,
   versionFixer: (record, setData) => {
+    // fix anyway
+    setData((d) => DataSchema.parse(d));
+    return;
+
     if (record.version !== version) {
       consoleLog(
         `Data schema version ${record.version} should be ${version}.`,

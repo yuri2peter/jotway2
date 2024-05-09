@@ -17,6 +17,7 @@ import 'src/common/prepareLibs';
 import AppRoutes from './routes';
 import enableChii from './helpers/enableChii';
 import { IS_DEV, USE_CHII } from 'src/common/config';
+import ThemeProvider from './ThemeProvider';
 
 IS_DEV && USE_CHII && enableChii();
 
@@ -24,11 +25,13 @@ export default function App() {
   return (
     <React.StrictMode>
       <MantineProvider>
-        <ModalsProvider>
-          <NavigationProgress />
-          <Notifications />
-          <AppRoutes />
-        </ModalsProvider>
+        <ThemeProvider>
+          <ModalsProvider>
+            <NavigationProgress />
+            <Notifications />
+            <AppRoutes />
+          </ModalsProvider>
+        </ThemeProvider>
       </MantineProvider>
     </React.StrictMode>
   );

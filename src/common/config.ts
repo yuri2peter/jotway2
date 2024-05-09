@@ -1,8 +1,8 @@
 // 项目名
-export const PROJECT_NAME = 'booza';
+export const PROJECT_NAME = 'jotway2';
 
 // 应用名
-export const APP_NAME = 'Booza App';
+export const APP_NAME = 'Jotway2';
 
 // 是否mac
 export const IS_MAC = process.platform === 'darwin';
@@ -28,7 +28,7 @@ export const CHII_PORT = 8080;
 export const USE_CORS = false;
 
 // 上传文件(DANGER)最大限制, 1024 * 1024 * 1024 表示 1G
-export const MAX_UPLOAD_FILE_SIZE = 0;
+export const MAX_UPLOAD_FILE_SIZE = 1024 * 1024 * 1024;
 
 // 上传文件访问前缀
 export const UPLOADS_URL_PREFIX = '/uploads';
@@ -37,13 +37,13 @@ export const UPLOADS_URL_PREFIX = '/uploads';
 export const DEV_RENDERER_ALLOWED_ALL_HOSTS = false;
 
 // 启用CHII调试器
-export const USE_CHII = false;
+export const USE_CHII = true;
 
 // 启用web server
 export const USE_WEB_SERVER = true;
 
 // 启用socket（需要启动web server）
-export const USE_SOCKET = false && USE_WEB_SERVER;
+export const USE_SOCKET = true && USE_WEB_SERVER;
 
 // 启用electron
 export const USE_ELECTRON = false;
@@ -55,3 +55,7 @@ export const OPEN_BROWSER_AFTER_WEB_SERVER_START =
 // 前端web开发时是否自动打开浏览器
 export const OPEN_BROWSER_AFTER_WEB_DEV_START =
   true && IS_DEV && IS_WIN && !USE_ELECTRON;
+
+// 前端web开发时是否自动打开CHII
+export const OPEN_CHII_AFTER_WEB_DEV_START =
+  true && USE_CHII && IS_DEV && IS_WIN;

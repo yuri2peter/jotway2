@@ -9,7 +9,7 @@ function prepareLibs() {
   dayjs.extend(relativeTime);
   dayjs.extend(duration);
   dayjs.extend(isLeapYear);
-  dayjs.locale('zh-cn');
+  // dayjs.locale('zh-cn');
   enableMapSet();
 }
 prepareLibs();
