@@ -12,7 +12,7 @@ const ActivityLayout: React.FC<{
       <Box
         style={{ flexGrow: 1, overflow: 'auto' }}
         maw={maxWidth}
-        miw={'30%'}
+        w={'100%'}
         mx={'auto'}
       >
         {children}
