@@ -25,16 +25,16 @@ IS_DEV && USE_CHII && enableChii();
 
 export default function App() {
   return (
-    <React.StrictMode>
-      <MantineProvider>
-        <ThemeProvider>
-          <ModalsProvider>
-            <NavigationProgress />
-            <Notifications />
-            <AppRoutes />
-          </ModalsProvider>
-        </ThemeProvider>
-      </MantineProvider>
-    </React.StrictMode>
+    // <React.StrictMode>
+    <MantineProvider>
+      <ThemeProvider>
+        <ModalsProvider>
+          <NavigationProgress />
+          <Notifications />
+          <AppRoutes />
+        </ModalsProvider>
+      </ThemeProvider>
+    </MantineProvider>
+    // </React.StrictMode>
   );
 }

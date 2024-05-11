@@ -63,13 +63,16 @@ const TodoList: React.FC<{}> = () => {
         </Stack>
       }
     >
-      <Group mb={'lg'}>
-        <IconListCheck size={32} />
-        <Text size={'32px'}>To-Do List</Text>
-        <FlexGrow />
-        <AddTask onClick={handleAddTask} />
-      </Group>
-      {values.length === 0 && <Text c="dimmed">No Item</Text>}
+      <Stack mb={'lg'}>
+        <Group>
+          <IconListCheck size={32} />
+          <Text size={'32px'}>To-Do List</Text>
+          <FlexGrow />
+          <AddTask onClick={handleAddTask} />
+        </Group>
+        <Text c={'gray'}>An intuitive task management solution.</Text>
+      </Stack>
+      {values.length === 0 && <Text>No Item. Click "Add" to add one.</Text>}
       <Stack gap={'lg'}>
         {values.map((item) => (
           <Item

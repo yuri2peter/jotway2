@@ -27,7 +27,7 @@ const Editor: React.FC<{}> = () => {
           setValue(text);
           saveText(text);
         }}
-        placeholder="Write something..."
+        placeholder="Ideas, notes, thoughts..."
         autosize
         minRows={8}
         maxRows={40}

@@ -2,6 +2,7 @@ import React from 'react';
 import { useGlobalStore } from 'src/renderer/store/useGlobalStore';
 import Jottings from '../Jottings';
 import TodoList from '../TodoList';
+import FileDrop from '../FileDrop';
 
 const AppMain: React.FC<{}> = () => {
   const { type } = useGlobalStore((s) => s.activity);
@@ -10,6 +11,9 @@ const AppMain: React.FC<{}> = () => {
   }
   if (type === 'todo') {
     return <TodoList />;
+  }
+  if (type === 'fileDrop') {
+    return <FileDrop />;
   }
   return null;
 };

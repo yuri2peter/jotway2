@@ -18,11 +18,14 @@ const Jottings: React.FC<{}> = () => {
         </Stack>
       }
     >
-      <Group mb={'lg'}>
-        <IconBulb size={32} />
-        <Text size={'32px'}>Jottings</Text>
-        <FlexGrow />
-      </Group>
+      <Stack mb={'lg'}>
+        <Group>
+          <IconBulb size={32} />
+          <Text size={'32px'}>Jottings</Text>
+          <FlexGrow />
+        </Group>
+        <Text c={'gray'}>Take notes effortlessly.</Text>
+      </Stack>
       <Editor />
     </ActivityLayout>
   );

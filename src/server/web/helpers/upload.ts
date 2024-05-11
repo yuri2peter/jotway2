@@ -25,7 +25,7 @@ export async function saveUploads(fileField: unknown) {
       originalFilename: f.originalFilename,
       mimetype: f.mimetype,
       size: f.size,
-      url: UPLOADS_URL_PREFIX + newFilename,
+      url: UPLOADS_URL_PREFIX + '/' + newFilename,
     };
   };
   const r1 = PersistentFileSchema.safeParse(fileField);

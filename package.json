@@ -17,7 +17,8 @@
     "maintainer": "yuri2peter@github"
   },
   "scripts": {
-    "start": "tsx dev/npm.scripts.menu.ts",
+    "start": "npm run start:node",
+    "start1": "tsx dev/npm.scripts.menu.ts",
     "start:node": "concurrently \"npm run dev:renderer\" \"npm run dev:node-server\"",
     "start:electron": "concurrently \"npm run dev:renderer\" \"npm run dev:electron-server",
     "dev:renderer": "concurrently \"cross-env NODE_ENV=development webpack serve --config ./dev/webpack.config.renderer.ts\" \"cross-env NODE_ENV=development ts-node src/renderer/startChii.ts\"",

@@ -5,6 +5,7 @@ import {
   IconBulb,
   IconBrandHipchat,
   IconSettings,
+  IconFile,
 } from '@tabler/icons-react';
 import NoteTree from '../NoteTree';
 import styles from './styles.module.css';
@@ -33,6 +34,13 @@ const NavBar: React.FC<{}> = () => {
           {...buttonProps}
           leftSection={<IconBulb {...iconProps} />}
           label="Jottings"
+        />
+        <NavLink
+          active={type === 'fileDrop'}
+          onClick={() => setActivity('fileDrop')}
+          {...buttonProps}
+          leftSection={<IconFile {...iconProps} />}
+          label="File Drop"
         />
         <NavLink
           active={type === 'todo'}

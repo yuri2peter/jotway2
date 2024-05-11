@@ -47,6 +47,9 @@ function useUpload(app: Koa) {
     bodyPaser({
       jsonLimit: '100mb',
       multipart: true,
+      onError(err, ctx) {
+        ctx.throw(422, 'body parse error');
+      },
       formidable: MAX_UPLOAD_FILE_SIZE
         ? {
             uploadDir: runtimeUploadsPath,

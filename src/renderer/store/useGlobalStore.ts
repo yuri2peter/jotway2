@@ -9,7 +9,7 @@ interface Store {
 
 const defaultStore: Store = {
   activity: {
-    type: 'jottings',
+    type: 'fileDrop',
   },
 };
 
