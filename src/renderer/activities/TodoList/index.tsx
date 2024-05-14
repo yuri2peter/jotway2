@@ -1,17 +1,16 @@
-import React, { useCallback, useEffect } from 'react';
-import { Breadcrumbs, Text, Stack, Group } from '@mantine/core';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Text, Stack } from '@mantine/core';
 import Item from './Item';
-import ActivityLayout from 'src/renderer/components/layouts/ActivityLayout';
-import { IconListCheck } from '@tabler/icons-react';
 import AddTask from './AddTask';
-import FlexGrow from 'src/renderer/components/miscs/FlexGrow';
 import { useListState } from '@mantine/hooks';
 import { TodoItem } from 'src/common/type/todo';
 import { api, apiErrorHandler } from 'src/renderer/helpers/api';
 import { nanoid } from 'nanoid';
 import { now } from 'lodash';
+import { ActvityTitleRightSideSlot } from '../ActivityRender';
 
 const TodoList: React.FC<{}> = () => {
+  const [loading, setLoading] = useState(true);
   const [values, { setState, prepend, applyWhere, filter }] = useListState(
     [] as TodoItem[]
   );
@@ -20,7 +19,9 @@ const TodoList: React.FC<{}> = () => {
       .post('/api/todo/get-list')
       .then(({ data }) => {
         setState(data as TodoItem[]);
-      });
+      })
+      .catch(apiErrorHandler)
+      .finally(() => setLoading(false));
   }, [setState]);
   const handleAddTask = useCallback(() => {
     const newTask: TodoItem = {
@@ -52,27 +53,14 @@ const TodoList: React.FC<{}> = () => {
     [filter]
   );
   return (
-    <ActivityLayout
-      maxWidth={600}
-      header={
-        <Stack gap={'xl'}>
-          <Breadcrumbs>
-            <Text c="gray">Tools</Text>
-            <Text>To-Do List</Text>
-          </Breadcrumbs>
-        </Stack>
-      }
-    >
-      <Stack mb={'lg'}>
-        <Group>
-          <IconListCheck size={32} />
-          <Text size={'32px'}>To-Do List</Text>
-          <FlexGrow />
-          <AddTask onClick={handleAddTask} />
-        </Group>
-        <Text c={'gray'}>An intuitive task management solution.</Text>
-      </Stack>
-      {values.length === 0 && <Text>No Item. Click "Add" to add one.</Text>}
+    <>
+      <ActvityTitleRightSideSlot>
+        <AddTask onClick={handleAddTask} />
+      </ActvityTitleRightSideSlot>
+      <Text c={'gray'}>An intuitive task management solution.</Text>
+      {values.length === 0 && !loading && (
+        <Text>No Item. Click "Add" to add one.</Text>
+      )}
       <Stack gap={'lg'}>
         {values.map((item) => (
           <Item
@@ -83,7 +71,7 @@ const TodoList: React.FC<{}> = () => {
           />
         ))}
       </Stack>
-    </ActivityLayout>
+    </>
   );
 };
 

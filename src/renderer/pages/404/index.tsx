@@ -22,7 +22,7 @@ const Page404: React.FC<{}> = () => {
             this is an error contact support.
           </Text>
           <Group justify="center">
-            <Button size="md" component={Link} to="/">
+            <Button size="md" component={Link} to="/a/jottings">
               Take me back to home page
             </Button>
           </Group>

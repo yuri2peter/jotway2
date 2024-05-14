@@ -1,14 +1,13 @@
 import React, { useMemo } from 'react';
 import {
-  ActionIcon,
   Checkbox,
   Group,
   Stack,
   Text,
   Input,
   Tooltip,
+  CloseButton,
 } from '@mantine/core';
-import { IconTrash } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { TodoItem } from 'src/common/type/todo';
 import { debounce, now } from 'lodash';
@@ -48,13 +47,7 @@ const Item: React.FC<{
           </Text>
         </Tooltip>
       </Stack>
-      <ActionIcon
-        variant="light"
-        color="gray"
-        onClick={() => onDelete(item.id)}
-      >
-        <IconTrash size={18} />
-      </ActionIcon>
+      <CloseButton onClick={() => onDelete(item.id)} />
     </Group>
   );
 };

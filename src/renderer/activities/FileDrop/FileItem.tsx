@@ -58,9 +58,7 @@ const FileItem: React.FC<{ item: FileDropItem; onDelete: () => void }> = ({
             </Tooltip>
           )}
         </CopyButton>
-        <Tooltip label={'Remove'} withArrow position="right">
-          <CloseButton onClick={onDelete} />
-        </Tooltip>
+        <CloseButton onClick={onDelete} />
       </Group>
     </Stack>
   );

@@ -1,8 +1,12 @@
-import React from 'react';
-import MyAppShell from './AppShell';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const PageHome: React.FC<{}> = () => {
-  return <MyAppShell></MyAppShell>;
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate('/a/jottings');
+  }, [navigate]);
+  return null;
 };
 
 export default PageHome;
