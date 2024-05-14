@@ -5,8 +5,9 @@ import { useDebouncedCallback, useListState } from '@mantine/hooks';
 import { nanoid } from 'nanoid';
 import Uploader from './Uploader';
 import { api, apiErrorHandler } from 'src/renderer/helpers/api';
-import { FileDropItem } from 'src/common/type/fileDrop';
+import { FileDropItem, FileDropItemSchema } from 'src/common/type/fileDrop';
 import FileItem from './FileItem';
+import { z } from 'zod';
 
 const FileDrop: React.FC<{}> = () => {
   const [uploadList, uploadListHandlers] = useListState<{
@@ -19,7 +20,7 @@ const FileDrop: React.FC<{}> = () => {
     api()
       .post('/api/file-drop/get-list')
       .then(({ data }) => {
-        setItemList(data);
+        setItemList(z.array(FileDropItemSchema).parse(data));
       })
       .catch(apiErrorHandler);
   }, [setItemList]);

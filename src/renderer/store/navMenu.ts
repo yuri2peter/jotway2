@@ -1,15 +1,15 @@
-export type NavMenu = {
+export type ActivityNavItems = {
   id: string;
   parentId: string;
   opened: boolean;
   active: boolean;
 }[];
 
-export const navMenu: NavMenu = [
+export const navMenu: ActivityNavItems = [
   {
     id: 'tools',
     parentId: '',
-    opened: true,
+    opened: false,
     active: false,
   },
   {

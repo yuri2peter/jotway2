@@ -6,9 +6,10 @@ import { useGlobalStore } from '../store/useGlobalStore';
 
 const elIdRightSide = 'activity-title-right-side';
 
-const ActivityRender: React.FC<{ id: string }> = ({ id }) => {
-  const activity = activityRegister[id];
-  const navMenu = useGlobalStore((s) => s.navMenu);
+const ActivityRender: React.FC = () => {
+  const currentActivityId = useGlobalStore((s) => s.currentActivityId);
+  const activity = activityRegister[currentActivityId];
+  const navMenu = useGlobalStore((s) => s.activityNavItems);
   const relativeIds = useMemo(() => {
     const ergodicItem = (
       itemId: string,
@@ -21,9 +22,9 @@ const ActivityRender: React.FC<{ id: string }> = ({ id }) => {
       }
     };
     const ids: string[] = [];
-    ergodicItem(id, (id) => ids.push(id));
+    ergodicItem(currentActivityId, (id) => ids.push(id));
     return ids.reverse();
-  }, [id, navMenu]);
+  }, [currentActivityId, navMenu]);
   if (!activity?.renderer) return null;
   return (
     <ActivityLayout
@@ -32,7 +33,7 @@ const ActivityRender: React.FC<{ id: string }> = ({ id }) => {
         <Stack gap={'xl'}>
           <Breadcrumbs>
             {relativeIds.map((cid) => (
-              <Text key={cid} c={id === cid ? 'dark' : 'gray'}>
+              <Text key={cid} c={currentActivityId === cid ? 'dark' : 'gray'}>
                 {activityRegister[cid]?.name}
               </Text>
             ))}
@@ -43,7 +44,7 @@ const ActivityRender: React.FC<{ id: string }> = ({ id }) => {
       <Stack mb={'lg'}>
         <Group>
           <activity.icon size={32} />
-          <Text size={'32px'}>{activityRegister[id]?.name}</Text>
+          <Text size={'32px'}>{activity?.name}</Text>
           <Box id={elIdRightSide} ml={'auto'}></Box>
         </Group>
         <activity.renderer />

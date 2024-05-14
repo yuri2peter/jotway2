@@ -3,11 +3,12 @@ import { Text, Stack } from '@mantine/core';
 import Item from './Item';
 import AddTask from './AddTask';
 import { useListState } from '@mantine/hooks';
-import { TodoItem } from 'src/common/type/todo';
+import { TodoItem, TodoItemSchema } from 'src/common/type/todo';
 import { api, apiErrorHandler } from 'src/renderer/helpers/api';
 import { nanoid } from 'nanoid';
 import { now } from 'lodash';
 import { ActvityTitleRightSideSlot } from '../ActivityRender';
+import { z } from 'zod';
 
 const TodoList: React.FC<{}> = () => {
   const [loading, setLoading] = useState(true);
@@ -18,7 +19,7 @@ const TodoList: React.FC<{}> = () => {
     api()
       .post('/api/todo/get-list')
       .then(({ data }) => {
-        setState(data as TodoItem[]);
+        setState(z.array(TodoItemSchema).parse(data));
       })
       .catch(apiErrorHandler)
       .finally(() => setLoading(false));

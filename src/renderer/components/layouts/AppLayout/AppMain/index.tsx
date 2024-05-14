@@ -1,10 +1,16 @@
 import React from 'react';
 import ActivityRender from 'src/renderer/activities/ActivityRender';
-import { useGlobalStore } from 'src/renderer/store/useGlobalStore';
+import { Outlet } from 'react-router-dom';
+import DirRender from 'src/renderer/components/DirRender';
 
 const AppMain: React.FC<{}> = () => {
-  const { id } = useGlobalStore((s) => s.activity);
-  return <ActivityRender id={id} />;
+  return (
+    <>
+      <Outlet />
+      <ActivityRender />
+      <DirRender />
+    </>
+  );
 };
 
 export default AppMain;
