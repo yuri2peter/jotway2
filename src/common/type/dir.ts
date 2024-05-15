@@ -5,7 +5,7 @@ export const DirSchema = z.object({
   id: zodSafeString(),
   name: zodSafeString(),
   parentId: zodSafeString(),
-  updatedAt: zodSafeNumber(),
+  createdAt: zodSafeNumber(),
 });
 
 export const DirNavItemSchema = DirSchema.extend({

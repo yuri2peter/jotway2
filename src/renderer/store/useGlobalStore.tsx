@@ -7,6 +7,11 @@ import { api, apiErrorHandler } from '../helpers/api';
 import { now } from 'lodash';
 import { nanoid } from 'nanoid';
 import { navigate } from '../hacks/navigate';
+import { NoteShort } from 'src/common/type/note';
+import { BookmarkShort } from 'src/common/type/bookmark';
+import { autoRenameWithIndex } from 'src/common/utils/string';
+import { openConfirmModal } from '@mantine/modals';
+import { Text } from '@mantine/core';
 
 interface Store {
   appReady: boolean;
@@ -15,6 +20,14 @@ interface Store {
   currentActivityId: string;
   currentDirId: string;
   dirNavItems: DirNavItem[];
+  currentDirSubItems: {
+    dirIds: string[];
+    dirs: Dir[];
+    noteShorts: NoteShort[];
+    noteIds: string[];
+    bookmarkShorts: BookmarkShort[];
+    bookmarkIds: string[];
+  };
 }
 
 const defaultStore: Store = {
@@ -24,6 +37,14 @@ const defaultStore: Store = {
   currentActivityId: '',
   currentDirId: '',
   dirNavItems: [],
+  currentDirSubItems: {
+    dirIds: [],
+    dirs: [],
+    noteShorts: [],
+    noteIds: [],
+    bookmarkShorts: [],
+    bookmarkIds: [],
+  },
 };
 
 export const useGlobalStore = createZustandStore(defaultStore, (set, get) => {
@@ -69,8 +90,9 @@ export const useGlobalStore = createZustandStore(defaultStore, (set, get) => {
       const openRelativeMenu = (id: string) => {
         const item = d.dirNavItems.find((t) => t.id === id);
         if (item) {
-          item.opened = true;
           item.active = true;
+          const subItems = d.dirNavItems.filter((t) => t.parentId === item.id);
+          item.opened = subItems.length > 0;
           openRelativeMenu(item.parentId);
         }
       };
@@ -105,6 +127,63 @@ export const useGlobalStore = createZustandStore(defaultStore, (set, get) => {
     await Promise.all([syncDirs()]);
     setAppReady(true);
   };
+  const fetchCurrentDirSubItems = async () => {
+    try {
+      const { data } = await api().post('/api/dir/get-sub-items', {
+        id: get().currentDirId,
+      });
+      set((d) => {
+        d.currentDirSubItems = data;
+      });
+    } catch (error) {
+      return apiErrorHandler(error);
+    }
+  };
+  const renameDir = async (id: string, name: string) => {
+    try {
+      set((d) => {
+        const dir = d.dirNavItems.find((t) => t.id === id);
+        if (dir) {
+          dir.name = name;
+        }
+      });
+      await api().post('/api/dir/rename', {
+        id,
+        name,
+      });
+    } catch (error) {
+      return apiErrorHandler(error);
+    }
+  };
+  const deleteDir = async (id: string) => {
+    const dir = get().dirNavItems.find((t) => t.id === id);
+    if (!dir) {
+      return;
+    }
+    openConfirmModal({
+      title: 'Delete folder',
+      centered: true,
+      children: (
+        <Text c="gray">
+          Are you sure you want to delete the folder{' '}
+          <Text c="blue" component="span">
+            "{dir.name}"
+          </Text>
+          ?
+        </Text>
+      ),
+      labels: { confirm: 'Delete', cancel: 'Cancel' },
+      onCancel: () => null,
+      onConfirm: () => {
+        api()
+          .post('/api/dir/delete-item', {
+            id,
+          })
+          .then(syncDirs)
+          .catch(apiErrorHandler);
+      },
+    });
+  };
   return {
     actions: {
       setSocketOnline(online: boolean) {
@@ -124,7 +203,14 @@ export const useGlobalStore = createZustandStore(defaultStore, (set, get) => {
         set((d) => {
           const item = d.dirNavItems.find((t) => t.id === id);
           if (item) {
-            item.opened = !item.opened;
+            const subItems = d.dirNavItems.filter(
+              (t) => t.parentId === item.id
+            );
+            if (subItems.length) {
+              item.opened = !item.opened;
+            } else {
+              item.opened = false;
+            }
           }
         });
       },
@@ -132,27 +218,33 @@ export const useGlobalStore = createZustandStore(defaultStore, (set, get) => {
       setCurrentDirId,
       syncDirs,
       syncApp,
-      createDir(parentId = '') {
+      async createDir(parentId = '', autoRedirect = true) {
         const newDir: Dir = {
           id: nanoid(),
-          name: 'Untitled',
+          name: autoRenameWithIndex(
+            'Untitled',
+            get().dirNavItems.map((t) => t.name)
+          ),
           parentId,
-          updatedAt: now(),
+          createdAt: now(),
         };
-        api()
-          .post('/api/dir/upsert-item', newDir)
-          .then(() => {
-            set((d) => {
-              d.dirNavItems.unshift({
-                ...newDir,
-                opened: false,
-                active: false,
-              });
-              navigate(`/d/${newDir.id}`);
+        try {
+          await api().post('/api/dir/upsert-item', newDir);
+          set((d) => {
+            d.dirNavItems.unshift({
+              ...newDir,
+              opened: false,
+              active: false,
             });
-          })
-          .catch(apiErrorHandler);
+            autoRedirect && navigate(`/d/${newDir.id}`);
+          });
+        } catch (error) {
+          return apiErrorHandler(error);
+        }
       },
+      fetchCurrentDirSubItems,
+      renameDir,
+      deleteDir,
     },
   };
 });

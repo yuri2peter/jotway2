@@ -9,6 +9,7 @@ import {
   IconStar,
 } from '@tabler/icons-react';
 import { iconProps } from './defines';
+import { navigate } from 'src/renderer/hacks/navigate';
 
 const DirNav: React.FC<{}> = () => {
   const currentDirId = useGlobalStore((s) => s.currentDirId);
@@ -70,7 +71,11 @@ const DirNavItem: React.FC<{ id: string }> = ({ id }) => {
       to={'/d/' + id}
       variant={id === currentDirId ? undefined : 'subtle'}
       onClick={() => {
-        toogleDirNavItem(id);
+        if (id !== currentDirId) {
+          navigate('/d/' + id);
+        } else {
+          toogleDirNavItem(id);
+        }
       }}
     ></NavLink>
   );
