@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet';
 import { useParams } from 'react-router-dom';
+import DirRender from 'src/renderer/components/DirRender';
+import NoItem from 'src/renderer/components/miscs/NoItem';
 import {
   selectCurrentDir,
   useGlobalStore,
@@ -15,11 +16,10 @@ const PageDir: React.FC<{}> = () => {
       setCurrentDirId(id);
     }
   }, [id, setCurrentDirId]);
-  return (
-    <>
-      <Helmet>{currentDir && <title>{currentDir?.name}</title>}</Helmet>
-    </>
-  );
+  if (!currentDir) {
+    return <NoItem />;
+  }
+  return <DirRender />;
 };
 
 export default PageDir;

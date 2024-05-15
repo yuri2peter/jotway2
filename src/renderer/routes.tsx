@@ -7,6 +7,8 @@ import PageActivity from './pages/a';
 import AppLayout from './components/layouts/AppLayout';
 import { NavigationHack } from './hacks/navigate';
 import PageDir from './pages/d';
+import PageDirFavorites from './pages/d/favorites';
+import PageDirRecycle from './pages/d/recycle';
 
 const Router = USE_WEB_SERVER ? BrowserRouter : HashRouter;
 
@@ -19,6 +21,8 @@ export default function AppRoutes() {
           <Route path="/" element={<AppLayout />}>
             <Route path="/" element={<PageHome />} />
             <Route path="/a/:id" element={<PageActivity />} />
+            <Route path="/d/favorites" element={<PageDirFavorites />} />
+            <Route path="/d/recycle" element={<PageDirRecycle />} />
             <Route path="/d/:id" element={<PageDir />} />
           </Route>
           <Route path="*" element={<Page404 />} />

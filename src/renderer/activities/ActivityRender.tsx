@@ -1,8 +1,18 @@
 import React, { useMemo } from 'react';
 import ActivityLayout from '../components/layouts/ActivityLayout';
 import { activityRegister } from './register';
-import { Stack, Breadcrumbs, Text, Group, Box, Portal } from '@mantine/core';
+import {
+  Stack,
+  Breadcrumbs,
+  Text,
+  Group,
+  Box,
+  Portal,
+  Anchor,
+} from '@mantine/core';
 import { useGlobalStore } from '../store/useGlobalStore';
+import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 const elIdRightSide = 'activity-title-right-side';
 
@@ -27,29 +37,41 @@ const ActivityRender: React.FC = () => {
   }, [currentActivityId, navMenu]);
   if (!activity?.renderer) return null;
   return (
-    <ActivityLayout
-      maxWidth={600}
-      header={
-        <Stack gap={'xl'}>
-          <Breadcrumbs>
-            {relativeIds.map((cid) => (
-              <Text key={cid} c={currentActivityId === cid ? 'dark' : 'gray'}>
-                {activityRegister[cid]?.name}
-              </Text>
-            ))}
-          </Breadcrumbs>
+    <>
+      <Helmet>
+        <title>{activity.name}</title>
+      </Helmet>
+      <ActivityLayout
+        maxWidth={600}
+        header={
+          <Stack gap={'xl'}>
+            <Breadcrumbs>
+              <></>
+              {relativeIds.map((cid) =>
+                currentActivityId === cid ? (
+                  <Anchor key={cid} to={`/a/${cid}`} component={Link} c="blue">
+                    {activity.name}
+                  </Anchor>
+                ) : (
+                  <Text key={cid} c={'gray'}>
+                    {activityRegister[cid]?.name}
+                  </Text>
+                )
+              )}
+            </Breadcrumbs>
+          </Stack>
+        }
+      >
+        <Stack mb={'lg'}>
+          <Group>
+            <activity.icon size={32} />
+            <Text size={'32px'}>{activity?.name}</Text>
+            <Box id={elIdRightSide} ml={'auto'}></Box>
+          </Group>
+          <activity.renderer />
         </Stack>
-      }
-    >
-      <Stack mb={'lg'}>
-        <Group>
-          <activity.icon size={32} />
-          <Text size={'32px'}>{activity?.name}</Text>
-          <Box id={elIdRightSide} ml={'auto'}></Box>
-        </Group>
-        <activity.renderer />
-      </Stack>
-    </ActivityLayout>
+      </ActivityLayout>
+    </>
   );
 };
 

@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet';
 import { useParams } from 'react-router-dom';
+import ActivityRender from 'src/renderer/activities/ActivityRender';
 import { activityRegister } from 'src/renderer/activities/register';
+import NoItem from 'src/renderer/components/miscs/NoItem';
 import { useGlobalStore } from 'src/renderer/store/useGlobalStore';
 
 const PageActivity: React.FC<{}> = () => {
@@ -13,11 +14,10 @@ const PageActivity: React.FC<{}> = () => {
       setCurrentActivityId(id);
     }
   }, [id, setCurrentActivityId]);
-  return (
-    <>
-      <Helmet>{activity && <title>{activity.name}</title>}</Helmet>
-    </>
-  );
+  if (!activity) {
+    return <NoItem />;
+  }
+  return <ActivityRender />;
 };
 
 export default PageActivity;

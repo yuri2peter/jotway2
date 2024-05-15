@@ -1,15 +1,28 @@
 import React from 'react';
-import { Button, NavLink } from '@mantine/core';
+import { NavLink } from '@mantine/core';
 import { useGlobalStore } from 'src/renderer/store/useGlobalStore';
 import { Link } from 'react-router-dom';
-import { IconFolder, IconPlus } from '@tabler/icons-react';
+import {
+  IconFolder,
+  IconPlus,
+  IconRecycle,
+  IconStar,
+} from '@tabler/icons-react';
 import { iconProps } from './defines';
 
 const DirNav: React.FC<{}> = () => {
+  const currentDirId = useGlobalStore((s) => s.currentDirId);
   const dirNavItems = useGlobalStore((s) => s.dirNavItems);
   const { createDir } = useGlobalStore((s) => s.actions);
   return (
     <>
+      <NavLink
+        label="Favorites"
+        leftSection={<IconStar {...iconProps} />}
+        component={Link}
+        to={'/d/favorites'}
+        active={currentDirId === 'favorites'}
+      ></NavLink>
       <NavLink
         label="New Folder"
         leftSection={<IconPlus {...iconProps} />}
@@ -22,6 +35,13 @@ const DirNav: React.FC<{}> = () => {
         .map((t) => (
           <DirNavItem key={t.id} id={t.id} />
         ))}
+      <NavLink
+        label="Recycle Bin"
+        leftSection={<IconRecycle {...iconProps} />}
+        component={Link}
+        to={'/d/recycle'}
+        active={currentDirId === 'recycle'}
+      ></NavLink>
     </>
   );
 };

@@ -165,3 +165,23 @@ export const selectCurrentDir = createSelector(
     return dirs.find((t) => t.id === currentDirId);
   }
 );
+export const selectRelativeDirs = createSelector(
+  [selectDirs, selectCurrentDirId],
+  (dirs, currentDirId) => {
+    const ergodicItem = (
+      itemId: string,
+      onFound: (dir: DirNavItem) => void
+    ): void => {
+      const item = dirs.find((t) => t.id === itemId);
+      if (item) onFound(item);
+      if (item?.parentId) {
+        ergodicItem(item.parentId, onFound);
+      }
+    };
+    const relativeDirs: DirNavItem[] = [];
+    ergodicItem(currentDirId, (item) => {
+      relativeDirs.unshift(item);
+    });
+    return relativeDirs;
+  }
+);
