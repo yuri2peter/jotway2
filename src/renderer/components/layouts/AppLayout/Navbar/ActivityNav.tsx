@@ -30,7 +30,7 @@ const ActivityNavItem: React.FC<{ id: string }> = ({ id }) => {
     label: activity.name,
     leftSection: <activity.icon {...iconProps} />,
     opened: navItem.opened,
-    childrenOffset: 28,
+    childrenOffset: 16,
     active: navItem.active,
     children: childrenItems.length
       ? childrenItems.map((t) => <ActivityNavItem key={t.id} id={t.id} />)

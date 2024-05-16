@@ -20,6 +20,10 @@ import AppRoutes from './routes';
 import enableChii from './helpers/enableChii';
 import { IS_DEV, USE_CHII } from 'src/common/config';
 import ThemeProvider from './ThemeProvider';
+import CreateBookmarkModal from './components/modals/CreateBookmarkModal';
+import CreateDirModal from './components/modals/CreateDirModal';
+import RenameDirModal from './components/modals/RenameDirModal';
+import RenameBookmarkModal from './components/modals/RenameBookmarkModal';
 
 IS_DEV && USE_CHII && enableChii();
 
@@ -28,7 +32,14 @@ export default function App() {
     <React.StrictMode>
       <MantineProvider>
         <ThemeProvider>
-          <ModalsProvider>
+          <ModalsProvider
+            modals={{
+              CreateBookmarkModal,
+              CreateDirModal,
+              RenameDirModal,
+              RenameBookmarkModal,
+            }}
+          >
             <NavigationProgress />
             <Notifications />
             <AppRoutes />

@@ -5,7 +5,7 @@ import db from 'src/server/data/db';
 const geminiApi =
   'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro';
 
-export async function generateContent(text: string) {
+export async function generateContent(text: string): Promise<string> {
   try {
     const { data } = await axios.post(
       geminiApi + ':generateContent?key=' + db().get().settings.geminiKey,

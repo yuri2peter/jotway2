@@ -10,11 +10,11 @@ import {
 } from '@tabler/icons-react';
 import { iconProps } from './defines';
 import { navigate } from 'src/renderer/hacks/navigate';
+import { openContextModal } from '@mantine/modals';
 
 const DirNav: React.FC<{}> = () => {
   const currentDirId = useGlobalStore((s) => s.currentDirId);
   const dirNavItems = useGlobalStore((s) => s.dirNavItems);
-  const { createDir } = useGlobalStore((s) => s.actions);
   return (
     <>
       <NavLink
@@ -28,7 +28,14 @@ const DirNav: React.FC<{}> = () => {
         label="New Folder"
         leftSection={<IconPlus {...iconProps} />}
         onClick={() => {
-          createDir();
+          openContextModal({
+            modal: 'CreateDirModal',
+            title: 'New folder',
+            innerProps: {
+              parentId: '',
+              autoRedirect: true,
+            },
+          });
         }}
       ></NavLink>
       {dirNavItems
@@ -58,7 +65,7 @@ const DirNavItem: React.FC<{ id: string }> = ({ id }) => {
     label: navItem.name,
     leftSection: <IconFolder {...iconProps} />,
     opened: navItem.opened,
-    childrenOffset: 28,
+    childrenOffset: 16,
     active: navItem.active,
     children: childrenItems.length
       ? childrenItems.map((t) => <DirNavItem key={t.id} id={t.id} />)

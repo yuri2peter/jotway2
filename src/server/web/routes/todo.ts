@@ -20,9 +20,9 @@ const todo: Controller = (router) => {
     ctx.body = { ok: 1 };
   });
   router.post('/api/todo/delete-item', async (ctx) => {
-    const todoItemId = z.object({ id: z.string() }).parse(ctx.request.body);
+    const { id } = z.object({ id: z.string() }).parse(ctx.request.body);
     db().changeData((d) => {
-      d.todoItems = d.todoItems.filter((i) => i.id !== todoItemId.id);
+      d.todoItems = d.todoItems.filter((i) => i.id !== id);
     });
     ctx.body = { ok: 1 };
   });

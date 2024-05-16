@@ -5,9 +5,8 @@ export const BookmarkShortSchema = z.object({
   id: zodSafeString(),
   name: zodSafeString(),
   parentId: zodSafeString(),
-  updatedAt: zodSafeNumber(),
+  createdAt: zodSafeNumber(),
   url: zodSafeString(),
-  icon: zodSafeString(),
   snapshot: zodSafeString(),
   summary: zodSafeString(),
 });

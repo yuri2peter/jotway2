@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   selectCurrentDir,
   useGlobalStore,
@@ -6,29 +6,25 @@ import {
 } from 'src/renderer/store/useGlobalStore';
 import ActivityLayout from '../layouts/ActivityLayout';
 import {
-  ActionIcon,
   Anchor,
   Breadcrumbs,
   Divider,
   Group,
   Stack,
   Text,
-  TextInput,
-  Tooltip,
 } from '@mantine/core';
 import { Link } from 'react-router-dom';
-import { IconFolder, IconPencil, IconTrash } from '@tabler/icons-react';
-import CreateMenu from './CreateMenu';
+import { IconFolder } from '@tabler/icons-react';
 import FlexGrow from '../miscs/FlexGrow';
 import { Helmet } from 'react-helmet';
 import DirItem from '../dirItems/DirItem';
+import BookmarkItem from '../dirItems/BookmarkItem';
+import Actions from './Actions';
 
 const DirRender: React.FC = () => {
-  const [showRename, setShowRename] = useState(false);
-  const { fetchCurrentDirSubItems, renameDir, deleteDir } = useGlobalStore(
-    (s) => s.actions
-  );
+  const { fetchCurrentDirSubItems } = useGlobalStore((s) => s.actions);
   const dirNavItems = useGlobalStore((s) => s.dirNavItems);
+  const currentDirSubItems = useGlobalStore((s) => s.currentDirSubItems);
   const currentItem = useGlobalStore(selectCurrentDir);
   const relativeDirs = useGlobalStore(selectRelativeDirs);
   useEffect(() => {
@@ -57,46 +53,10 @@ const DirRender: React.FC = () => {
       >
         <Stack gap={'xl'}>
           <Group>
-            <IconFolder size={32} />
-            {showRename ? (
-              <TextInput
-                defaultValue={currentItem.name}
-                autoFocus
-                size="lg"
-                required
-                onBlur={(e) => {
-                  setShowRename(false);
-                  renameDir(currentItem.id, e.target.value);
-                }}
-              />
-            ) : (
-              <Text size={'32px'}>{currentItem.name}</Text>
-            )}
-
+            <IconFolder size={32} stroke={1.5} />
+            <Text size={'32px'}>{currentItem.name}</Text>
             <FlexGrow />
-            <CreateMenu />
-            <Tooltip label="Rename">
-              <ActionIcon
-                variant="subtle"
-                color="gray"
-                onClick={() => {
-                  setShowRename(true);
-                }}
-              >
-                <IconPencil />
-              </ActionIcon>
-            </Tooltip>
-            <Tooltip label="Delete">
-              <ActionIcon
-                variant="subtle"
-                color="gray"
-                onClick={() => {
-                  deleteDir(currentItem.id);
-                }}
-              >
-                <IconTrash />
-              </ActionIcon>
-            </Tooltip>
+            <Actions />
           </Group>
           <Divider />
           <Stack>
@@ -105,6 +65,9 @@ const DirRender: React.FC = () => {
               .map((t) => (
                 <DirItem key={t.id} dir={t} />
               ))}
+            {currentDirSubItems.bookmarkShorts.map((t) => (
+              <BookmarkItem key={t.id} bookmark={t} />
+            ))}
           </Stack>
         </Stack>
       </ActivityLayout>

@@ -8,7 +8,7 @@ import { now } from 'lodash';
 import { nanoid } from 'nanoid';
 import { navigate } from '../hacks/navigate';
 import { NoteShort } from 'src/common/type/note';
-import { BookmarkShort } from 'src/common/type/bookmark';
+import { BookmarkShort, BookmarkShortSchema } from 'src/common/type/bookmark';
 import { autoRenameWithIndex } from 'src/common/utils/string';
 import { openConfirmModal } from '@mantine/modals';
 import { Text } from '@mantine/core';
@@ -184,6 +184,66 @@ export const useGlobalStore = createZustandStore(defaultStore, (set, get) => {
       },
     });
   };
+  const renameBookmark = async (id: string, name: string) => {
+    try {
+      set((d) => {
+        const b = d.currentDirSubItems.bookmarkShorts.find((t) => t.id === id);
+        if (b) {
+          b.name = name;
+        }
+      });
+      await api().post('/api/bookmark/rename', {
+        id,
+        name,
+      });
+    } catch (error) {
+      return apiErrorHandler(error);
+    }
+  };
+  const deleteBookmark = async (id: string) => {
+    await api()
+      .post('/api/bookmark/delete-item', {
+        id,
+      })
+      .then(() => {
+        set((d) => {
+          d.currentDirSubItems.bookmarkIds =
+            d.currentDirSubItems.bookmarkIds.filter((t) => t !== id);
+          d.currentDirSubItems.bookmarkShorts =
+            d.currentDirSubItems.bookmarkShorts.filter((t) => t.id !== id);
+        });
+      })
+      .catch(apiErrorHandler);
+  };
+  const createBookmark = async (url: string, parentId: string) => {
+    try {
+      const { data: data1 } = await api().post('/api/bookmark/create-item', {
+        url,
+        parentId,
+      });
+      const item1 = BookmarkShortSchema.parse(data1);
+      if (get().currentDirId === parentId) {
+        set((d) => {
+          d.currentDirSubItems.bookmarkIds.unshift(item1.id);
+          d.currentDirSubItems.bookmarkShorts.unshift(item1);
+        });
+      }
+      const { data: data2 } = await api().post('/api/bookmark/analysis-item', {
+        id: item1.id,
+      });
+      const item2 = BookmarkShortSchema.parse(data2);
+      set((d) => {
+        const prevItem = d.currentDirSubItems.bookmarkShorts.find(
+          (t) => t.id === item2.id
+        );
+        if (prevItem) {
+          Object.assign(prevItem, item2);
+        }
+      });
+    } catch (error) {
+      return apiErrorHandler(error);
+    }
+  };
   return {
     actions: {
       setSocketOnline(online: boolean) {
@@ -218,13 +278,18 @@ export const useGlobalStore = createZustandStore(defaultStore, (set, get) => {
       setCurrentDirId,
       syncDirs,
       syncApp,
-      async createDir(parentId = '', autoRedirect = true) {
+      async createDir({
+        name = 'Untitled',
+        parentId = '',
+        autoRedirect = false,
+      }: {
+        name?: string;
+        parentId?: string;
+        autoRedirect?: boolean;
+      }) {
         const newDir: Dir = {
           id: nanoid(),
-          name: autoRenameWithIndex(
-            'Untitled',
-            get().dirNavItems.map((t) => t.name)
-          ),
+          name,
           parentId,
           createdAt: now(),
         };
@@ -245,6 +310,9 @@ export const useGlobalStore = createZustandStore(defaultStore, (set, get) => {
       fetchCurrentDirSubItems,
       renameDir,
       deleteDir,
+      createBookmark,
+      deleteBookmark,
+      renameBookmark,
     },
   };
 });

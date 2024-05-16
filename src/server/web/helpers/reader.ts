@@ -18,18 +18,18 @@ export async function metaReader(url: string) {
   const title = $('title').text() || 'No Title';
   const description =
     $('meta[name="description" i]').attr('content') || 'No description.';
-  const iconLink =
+  const IconWorldWww =
     $('link[rel="icon" i], link[rel="shortcut icon" i]').attr('href') || '';
   return z
     .object({
       description: z.string(),
       title: z.string(),
-      iconLink: z.string(),
+      IconWorldWww: z.string(),
     })
     .parse({
       title,
       description,
-      iconLink,
+      IconWorldWww,
     });
 }
 
@@ -59,7 +59,7 @@ export async function urlParser(url: string) {
     metaReader(url),
   ]);
   const summary = await generateContent(
-    'Summarize the content of this website in no more than two sentences.\n\n' +
+    'Summarize the content of this website in no more than one sentences.\n\n' +
       JSON.stringify({
         Title: meta.title,
         Description: meta.description,

@@ -5,7 +5,7 @@ export const NoteShortSchema = z.object({
   id: zodSafeString(),
   name: zodSafeString(),
   parentId: zodSafeString(),
-  updatedAt: zodSafeNumber(),
+  createdAt: zodSafeNumber(),
   summary: zodSafeString(),
 });
 
