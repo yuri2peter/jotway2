@@ -5,7 +5,6 @@ import { BookmarkSchema } from 'src/common/type/bookmark';
 import { nanoid } from 'nanoid';
 import { now } from 'lodash';
 import { urlParser } from '../helpers/reader';
-import { basename } from 'node:path/posix';
 
 const bookmark: Controller = (router) => {
   router.post('/api/bookmark/create-item', async (ctx) => {
@@ -14,7 +13,8 @@ const bookmark: Controller = (router) => {
       .parse(ctx.request.body);
     const item = BookmarkSchema.parse({
       id: nanoid(),
-      name: url,
+      name: new URL(url).hostname + new URL(url).pathname,
+      summary: 'Parsing, please wait...',
       url,
       parentId,
       createdAt: now(),

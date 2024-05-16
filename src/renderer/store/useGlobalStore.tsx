@@ -9,7 +9,6 @@ import { nanoid } from 'nanoid';
 import { navigate } from '../hacks/navigate';
 import { NoteShort } from 'src/common/type/note';
 import { BookmarkShort, BookmarkShortSchema } from 'src/common/type/bookmark';
-import { autoRenameWithIndex } from 'src/common/utils/string';
 import { openConfirmModal } from '@mantine/modals';
 import { Text } from '@mantine/core';
 
