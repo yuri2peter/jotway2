@@ -1,10 +1,10 @@
 import { Controller } from '../types/controller';
 import { saveUploads } from '../helpers/upload';
-import { urlParser } from '../helpers/reader';
+import { urlParser } from '../helpers/reader2';
 
 const test: Controller = (router) => {
   router.all('/api/test', async (ctx) => {
-    const url = 'https://www.mcmod.cn/';
+    const { url } = ctx.request.body;
     const content = await urlParser(url);
     ctx.body = { content };
   });

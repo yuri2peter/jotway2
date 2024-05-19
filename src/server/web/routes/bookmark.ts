@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { BookmarkSchema } from 'src/common/type/bookmark';
 import { nanoid } from 'nanoid';
 import { now } from 'lodash';
-import { urlParser } from '../helpers/reader';
+import { urlParser } from '../helpers/reader2';
 
 const bookmark: Controller = (router) => {
   router.post('/api/bookmark/create-item', async (ctx) => {
@@ -14,7 +14,6 @@ const bookmark: Controller = (router) => {
     const item = BookmarkSchema.parse({
       id: nanoid(),
       name: new URL(url).hostname + new URL(url).pathname,
-      summary: 'Parsing, please wait...',
       url,
       parentId,
       createdAt: now(),
@@ -33,12 +32,15 @@ const bookmark: Controller = (router) => {
       ctx.throw(404);
       return;
     }
-    const { meta, summary, snapshot } = await urlParser(item.url);
+    const { title, summary, screenshot, description } = await urlParser(
+      item.url
+    );
     const newItem = {
       ...item,
-      name: meta.title,
+      name: title,
       summary,
-      snapshot,
+      screenshot,
+      description,
     };
     db().changeData((d) => {
       const dbItem = d.bookmarks.find((i) => i.id === id);

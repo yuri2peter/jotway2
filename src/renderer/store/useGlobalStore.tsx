@@ -227,8 +227,25 @@ export const useGlobalStore = createZustandStore(defaultStore, (set, get) => {
           d.currentDirSubItems.bookmarkShorts.unshift(item1);
         });
       }
+      await analysisBookmark(item1.id);
+    } catch (error) {
+      return apiErrorHandler(error);
+    }
+  };
+  const analysisBookmark = async (id: string) => {
+    try {
+      set((d) => {
+        const prevItem = d.currentDirSubItems.bookmarkShorts.find(
+          (t) => t.id === id
+        );
+        if (prevItem) {
+          Object.assign(prevItem, {
+            summary: 'Analysing...',
+          });
+        }
+      });
       const { data: data2 } = await api().post('/api/bookmark/analysis-item', {
-        id: item1.id,
+        id,
       });
       const item2 = BookmarkShortSchema.parse(data2);
       set((d) => {
@@ -312,6 +329,7 @@ export const useGlobalStore = createZustandStore(defaultStore, (set, get) => {
       createBookmark,
       deleteBookmark,
       renameBookmark,
+      analysisBookmark,
     },
   };
 });

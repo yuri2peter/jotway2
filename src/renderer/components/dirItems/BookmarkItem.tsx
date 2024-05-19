@@ -7,6 +7,8 @@ import {
   Text,
   CopyButton,
   Menu,
+  Image,
+  AspectRatio,
 } from '@mantine/core';
 import {
   IconWorldWww,
@@ -14,6 +16,7 @@ import {
   IconTrash,
   IconCopy,
   IconDotsVertical,
+  IconRobot,
 } from '@tabler/icons-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -21,7 +24,7 @@ import FlexGrow from '../miscs/FlexGrow';
 import { useGlobalStore } from 'src/renderer/store/useGlobalStore';
 import { BookmarkShort } from 'src/common/type/bookmark';
 import { openContextModal } from '@mantine/modals';
-import MarkdownRender from '../MarkdownRender';
+// import MarkdownRender from '../MarkdownRender';
 import { notifications } from '@mantine/notifications';
 
 const iconProps = {
@@ -30,16 +33,22 @@ const iconProps = {
 };
 
 const BookmarkItem: React.FC<{ bookmark: BookmarkShort }> = ({ bookmark }) => {
-  const { deleteBookmark } = useGlobalStore((s) => s.actions);
+  const { deleteBookmark, analysisBookmark } = useGlobalStore((s) => s.actions);
   return (
     <Group wrap="nowrap" align="start">
       <IconWorldWww stroke={1.5} />
       <Stack gap={'0'}>
         <Tooltip
-          label={<MarkdownRender text={bookmark.snapshot} />}
-          maw={800}
-          mah={500}
-          multiline
+          // label={<MarkdownRender text={bookmark.snapshot} />}
+          label={
+            bookmark.screenshot ? (
+              <AspectRatio ratio={1440 / 900} maw={1440 / 2} w={'100vw'}>
+                <Image src={bookmark.screenshot} alt="screenshot" />
+              </AspectRatio>
+            ) : (
+              bookmark.url
+            )
+          }
           openDelay={500}
           closeDelay={100}
         >
@@ -92,6 +101,14 @@ const BookmarkItem: React.FC<{ bookmark: BookmarkShort }> = ({ bookmark }) => {
             }}
           >
             Rename
+          </Menu.Item>
+          <Menu.Item
+            leftSection={<IconRobot {...iconProps} />}
+            onClick={() => {
+              analysisBookmark(bookmark.id);
+            }}
+          >
+            Analyze
           </Menu.Item>
           <Menu.Item
             leftSection={<IconTrash {...iconProps} />}
