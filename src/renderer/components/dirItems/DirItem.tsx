@@ -1,6 +1,11 @@
-import { ActionIcon, Anchor, Group, TextInput, Tooltip } from '@mantine/core';
-import { IconFolder, IconPencil, IconTrash } from '@tabler/icons-react';
-import React, { useState } from 'react';
+import { ActionIcon, Anchor, Group, Menu, Tooltip } from '@mantine/core';
+import {
+  IconFolder,
+  IconDotsVertical,
+  IconPencil,
+  IconTrash,
+} from '@tabler/icons-react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Dir } from 'src/common/type/dir';
 import FlexGrow from '../miscs/FlexGrow';
@@ -13,57 +18,46 @@ const iconProps = {
 };
 
 const DirItem: React.FC<{ dir: Dir }> = ({ dir }) => {
-  const [showRename, setShowRename] = useState(false);
-  const { renameDir, deleteDir } = useGlobalStore((s) => s.actions);
+  const { deleteDir } = useGlobalStore((s) => s.actions);
   return (
     <Group wrap="nowrap" align="start">
       <IconFolder stroke={1.5} />
-      {showRename ? (
-        <TextInput
-          defaultValue={dir.name}
-          autoFocus
-          required
-          onBlur={(e) => {
-            setShowRename(false);
-            renameDir(dir.id, e.target.value);
-          }}
-        />
-      ) : (
-        <Anchor component={Link} to={`/d/${dir.id}`}>
-          {dir.name}
-        </Anchor>
-      )}
+      <Anchor component={Link} to={`/d/${dir.id}`}>
+        {dir.name}
+      </Anchor>
       <FlexGrow />
-      <ActionIcon.Group>
-        <Tooltip label="Rename">
-          <ActionIcon variant="default">
-            <IconPencil
-              {...iconProps}
-              onClick={() => {
-                openContextModal({
-                  modal: 'RenameDirModal',
-                  title: 'Rename folder',
-                  innerProps: {
-                    id: dir.id,
-                    initialName: dir.name,
-                  },
-                });
-              }}
-            />
+      <Menu shadow="md" width={200} trigger="click-hover">
+        <Menu.Target>
+          <ActionIcon variant="subtle">
+            <IconDotsVertical {...iconProps} />
           </ActionIcon>
-        </Tooltip>
-
-        <Tooltip label="Delete">
-          <ActionIcon variant="default">
-            <IconTrash
-              {...iconProps}
-              onClick={() => {
-                deleteDir(dir.id);
-              }}
-            />
-          </ActionIcon>
-        </Tooltip>
-      </ActionIcon.Group>
+        </Menu.Target>
+        <Menu.Dropdown>
+          <Menu.Item
+            leftSection={<IconPencil {...iconProps} />}
+            onClick={() => {
+              openContextModal({
+                modal: 'RenameDirModal',
+                title: 'Rename folder',
+                innerProps: {
+                  id: dir.id,
+                  initialName: dir.name,
+                },
+              });
+            }}
+          >
+            Rename
+          </Menu.Item>
+          <Menu.Item
+            leftSection={<IconTrash {...iconProps} />}
+            onClick={() => {
+              deleteDir(dir.id);
+            }}
+          >
+            Delete
+          </Menu.Item>
+        </Menu.Dropdown>
+      </Menu>
     </Group>
   );
 };

@@ -1,4 +1,4 @@
-import { ActionIcon, Tooltip } from '@mantine/core';
+import { ActionIcon, Menu, Tooltip } from '@mantine/core';
 import { openContextModal } from '@mantine/modals';
 import {
   IconWorldWww,
@@ -6,6 +6,7 @@ import {
   IconNotes,
   IconPencil,
   IconTrash,
+  IconDotsVertical,
 } from '@tabler/icons-react';
 import React from 'react';
 import {
@@ -25,77 +26,73 @@ const Actions: React.FC<{}> = () => {
     return null;
   }
   return (
-    <ActionIcon.Group>
-      <Tooltip label="New Subfolder">
-        <ActionIcon variant="default">
-          <IconFolder
-            {...iconProps}
-            onClick={() => {
-              openContextModal({
-                modal: 'CreateDirModal',
-                title: 'New subfolder',
-                innerProps: {
-                  parentId: currentItem.id,
-                  autoDirect: false,
-                },
-              });
-            }}
-          />
+    <Menu shadow="md" width={200} trigger="click-hover">
+      <Menu.Target>
+        <ActionIcon variant="subtle">
+          <IconDotsVertical {...iconProps} />
         </ActionIcon>
-      </Tooltip>
-
-      <Tooltip label="New Bookmark">
-        <ActionIcon variant="default">
-          <IconWorldWww
-            {...iconProps}
-            onClick={() => {
-              openContextModal({
-                modal: 'CreateBookmarkModal',
-                title: 'New bookmark',
-                innerProps: {
-                  parentId: currentItem.id,
-                },
-              });
-            }}
-          />
-        </ActionIcon>
-      </Tooltip>
-
-      <Tooltip label="New Note">
-        <ActionIcon variant="default">
-          <IconNotes {...iconProps} />
-        </ActionIcon>
-      </Tooltip>
-
-      <Tooltip label="Rename">
-        <ActionIcon variant="default">
-          <IconPencil
-            {...iconProps}
-            onClick={() => {
-              openContextModal({
-                modal: 'RenameDirModal',
-                title: 'Rename folder',
-                innerProps: {
-                  id: currentItem.id,
-                  initialName: currentItem.name,
-                },
-              });
-            }}
-          />
-        </ActionIcon>
-      </Tooltip>
-
-      <Tooltip label="Delete">
-        <ActionIcon variant="default">
-          <IconTrash
-            {...iconProps}
-            onClick={() => {
-              deleteDir(currentItem.id);
-            }}
-          />
-        </ActionIcon>
-      </Tooltip>
-    </ActionIcon.Group>
+      </Menu.Target>
+      <Menu.Dropdown>
+        <Menu.Item
+          leftSection={<IconFolder {...iconProps} />}
+          onClick={() => {
+            openContextModal({
+              modal: 'CreateDirModal',
+              title: 'New subfolder',
+              innerProps: {
+                parentId: currentItem.id,
+                autoDirect: false,
+              },
+            });
+          }}
+        >
+          New subfolder
+        </Menu.Item>
+        <Menu.Item
+          leftSection={<IconWorldWww {...iconProps} />}
+          onClick={() => {
+            openContextModal({
+              modal: 'CreateBookmarkModal',
+              title: 'New bookmark',
+              innerProps: {
+                parentId: currentItem.id,
+              },
+            });
+          }}
+        >
+          New Bookmark
+        </Menu.Item>
+        <Menu.Item
+          leftSection={<IconNotes {...iconProps} />}
+          onClick={() => {}}
+        >
+          New Note
+        </Menu.Item>
+        <Menu.Item
+          leftSection={<IconPencil {...iconProps} />}
+          onClick={() => {
+            openContextModal({
+              modal: 'RenameDirModal',
+              title: 'Rename folder',
+              innerProps: {
+                id: currentItem.id,
+                initialName: currentItem.name,
+              },
+            });
+          }}
+        >
+          Rename
+        </Menu.Item>
+        <Menu.Item
+          leftSection={<IconTrash {...iconProps} />}
+          onClick={() => {
+            deleteDir(currentItem.id);
+          }}
+        >
+          Delete
+        </Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
   );
 };
 

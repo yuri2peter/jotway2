@@ -4,6 +4,7 @@ import { useGlobalStore } from 'src/renderer/store/useGlobalStore';
 import { Link } from 'react-router-dom';
 import {
   IconFolder,
+  IconFolderOpen,
   IconPlus,
   IconRecycle,
   IconStar,
@@ -61,9 +62,11 @@ const DirNavItem: React.FC<{ id: string }> = ({ id }) => {
   const navItem = navMenu.find((n) => n.id === id);
   if (!navItem) return null;
   const childrenItems = navMenu.filter((t) => t.parentId === id);
+  const isCurrent = id === currentDirId;
+  const Icon = isCurrent ? IconFolderOpen : IconFolder;
   const itemProps = {
     label: navItem.name,
-    leftSection: <IconFolder {...iconProps} />,
+    leftSection: <Icon {...iconProps} />,
     opened: navItem.opened,
     childrenOffset: 16,
     active: navItem.active,
@@ -76,7 +79,7 @@ const DirNavItem: React.FC<{ id: string }> = ({ id }) => {
       {...itemProps}
       component={Link}
       to={'/d/' + id}
-      variant={id === currentDirId ? undefined : 'subtle'}
+      variant={isCurrent ? undefined : 'subtle'}
       onClick={() => {
         if (id !== currentDirId) {
           navigate('/d/' + id);

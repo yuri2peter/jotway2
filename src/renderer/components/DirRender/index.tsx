@@ -14,7 +14,7 @@ import {
   Text,
 } from '@mantine/core';
 import { Link } from 'react-router-dom';
-import { IconFolder } from '@tabler/icons-react';
+import { IconFolderOpen } from '@tabler/icons-react';
 import FlexGrow from '../miscs/FlexGrow';
 import { Helmet } from 'react-helmet';
 import DirItem from '../dirItems/DirItem';
@@ -52,8 +52,8 @@ const DirRender: React.FC = () => {
         }
       >
         <Stack gap={'xl'}>
-          <Group>
-            <IconFolder size={32} stroke={1.5} />
+          <Group wrap="nowrap" align="center">
+            <IconFolderOpen size={32} stroke={1.5} />
             <Text size={'32px'}>{currentItem.name}</Text>
             <FlexGrow />
             <Actions />

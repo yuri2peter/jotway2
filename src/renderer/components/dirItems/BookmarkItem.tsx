@@ -6,7 +6,7 @@ import {
   Tooltip,
   Text,
   CopyButton,
-  rem,
+  Menu,
 } from '@mantine/core';
 import {
   IconWorldWww,
@@ -14,6 +14,7 @@ import {
   IconTrash,
   IconCheck,
   IconCopy,
+  IconDotsVertical,
 } from '@tabler/icons-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -22,6 +23,7 @@ import { useGlobalStore } from 'src/renderer/store/useGlobalStore';
 import { BookmarkShort } from 'src/common/type/bookmark';
 import { openContextModal } from '@mantine/modals';
 import MarkdownRender from '../MarkdownRender';
+import { notifications } from '@mantine/notifications';
 
 const iconProps = {
   color: 'gray',
@@ -53,52 +55,55 @@ const BookmarkItem: React.FC<{ bookmark: BookmarkShort }> = ({ bookmark }) => {
         </Tooltip>
       </Stack>
       <FlexGrow />
-      <ActionIcon.Group>
-        <CopyButton value={bookmark.url} timeout={2000}>
-          {({ copied, copy }) => (
-            <Tooltip label={copied ? 'Copied' : 'Copy URL'}>
-              <ActionIcon
-                color={copied ? 'teal' : 'gray'}
-                variant="default"
-                onClick={copy}
+      <Menu shadow="md" width={200} trigger="click-hover">
+        <Menu.Target>
+          <ActionIcon variant="subtle">
+            <IconDotsVertical {...iconProps} />
+          </ActionIcon>
+        </Menu.Target>
+        <Menu.Dropdown>
+          <CopyButton value={bookmark.url} timeout={2000}>
+            {({ copy }) => (
+              <Menu.Item
+                leftSection={<IconCopy {...iconProps} />}
+                onClick={() => {
+                  copy();
+                  notifications.show({
+                    color: 'green',
+                    title: 'Copied to clipboard',
+                    message: bookmark.url,
+                  });
+                }}
               >
-                {copied ? (
-                  <IconCheck {...iconProps} />
-                ) : (
-                  <IconCopy {...iconProps} />
-                )}
-              </ActionIcon>
-            </Tooltip>
-          )}
-        </CopyButton>
-        <Tooltip label="Rename">
-          <ActionIcon variant="default">
-            <IconPencil
-              {...iconProps}
-              onClick={() => {
-                openContextModal({
-                  modal: 'RenameBookmarkModal',
-                  title: 'Rename bookmark',
-                  innerProps: {
-                    id: bookmark.id,
-                    initialName: bookmark.name,
-                  },
-                });
-              }}
-            />
-          </ActionIcon>
-        </Tooltip>
-        <Tooltip label="Delete">
-          <ActionIcon variant="default">
-            <IconTrash
-              {...iconProps}
-              onClick={() => {
-                deleteBookmark(bookmark.id);
-              }}
-            />
-          </ActionIcon>
-        </Tooltip>
-      </ActionIcon.Group>
+                Copy URL
+              </Menu.Item>
+            )}
+          </CopyButton>
+          <Menu.Item
+            leftSection={<IconPencil {...iconProps} />}
+            onClick={() => {
+              openContextModal({
+                modal: 'RenameBookmarkModal',
+                title: 'Rename bookmark',
+                innerProps: {
+                  id: bookmark.id,
+                  initialName: bookmark.name,
+                },
+              });
+            }}
+          >
+            Rename
+          </Menu.Item>
+          <Menu.Item
+            leftSection={<IconTrash {...iconProps} />}
+            onClick={() => {
+              deleteBookmark(bookmark.id);
+            }}
+          >
+            Delete
+          </Menu.Item>
+        </Menu.Dropdown>
+      </Menu>
     </Group>
   );
 };
