@@ -1,4 +1,4 @@
-import { ActionIcon, Anchor, Group, Menu, Tooltip } from '@mantine/core';
+import { ActionIcon, Anchor, Group, Menu } from '@mantine/core';
 import {
   IconFolder,
   IconDotsVertical,

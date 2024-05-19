@@ -1,4 +1,4 @@
-import { ActionIcon, Menu, Tooltip } from '@mantine/core';
+import { ActionIcon, Menu } from '@mantine/core';
 import { openContextModal } from '@mantine/modals';
 import {
   IconWorldWww,
@@ -33,41 +33,6 @@ const Actions: React.FC<{}> = () => {
         </ActionIcon>
       </Menu.Target>
       <Menu.Dropdown>
-        <Menu.Item
-          leftSection={<IconFolder {...iconProps} />}
-          onClick={() => {
-            openContextModal({
-              modal: 'CreateDirModal',
-              title: 'New subfolder',
-              innerProps: {
-                parentId: currentItem.id,
-                autoDirect: false,
-              },
-            });
-          }}
-        >
-          New subfolder
-        </Menu.Item>
-        <Menu.Item
-          leftSection={<IconWorldWww {...iconProps} />}
-          onClick={() => {
-            openContextModal({
-              modal: 'CreateBookmarkModal',
-              title: 'New bookmark',
-              innerProps: {
-                parentId: currentItem.id,
-              },
-            });
-          }}
-        >
-          New Bookmark
-        </Menu.Item>
-        <Menu.Item
-          leftSection={<IconNotes {...iconProps} />}
-          onClick={() => {}}
-        >
-          New Note
-        </Menu.Item>
         <Menu.Item
           leftSection={<IconPencil {...iconProps} />}
           onClick={() => {

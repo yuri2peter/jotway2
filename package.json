@@ -47,6 +47,7 @@
     "@blocknote/core": "^0.13.0",
     "@blocknote/mantine": "^0.13.1",
     "@blocknote/react": "^0.13.1",
+    "@google/generative-ai": "^0.11.3",
     "@koa/cors": "^5.0.0",
     "@mantine/carousel": "^7.9.0",
     "@mantine/code-highlight": "^7.9.0",

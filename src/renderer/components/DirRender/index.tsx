@@ -20,6 +20,7 @@ import { Helmet } from 'react-helmet';
 import DirItem from '../dirItems/DirItem';
 import BookmarkItem from '../dirItems/BookmarkItem';
 import Actions from './Actions';
+import Creates from './Creates';
 
 const DirRender: React.FC = () => {
   const { fetchCurrentDirSubItems } = useGlobalStore((s) => s.actions);
@@ -52,12 +53,15 @@ const DirRender: React.FC = () => {
         }
       >
         <Stack gap={'xl'}>
-          <Group wrap="nowrap" align="center">
-            <IconFolderOpen size={32} stroke={1.5} />
-            <Text size={'32px'}>{currentItem.name}</Text>
-            <FlexGrow />
-            <Actions />
-          </Group>
+          <Stack gap={'md'}>
+            <Group wrap="nowrap" align="center">
+              <IconFolderOpen size={32} stroke={1.5} />
+              <Text size={'32px'}>{currentItem.name}</Text>
+              <FlexGrow />
+              <Actions />
+            </Group>
+            <Creates />
+          </Stack>
           <Divider />
           <Stack>
             {dirNavItems

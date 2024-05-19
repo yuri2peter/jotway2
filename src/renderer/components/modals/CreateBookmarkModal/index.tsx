@@ -9,11 +9,11 @@ const CreateBookmarkModal = ({
   context,
   id,
   innerProps,
-}: ContextModalProps<{ parentId: string }>) => {
+}: ContextModalProps<{ parentId: string; defaultUrl: string }>) => {
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
-      url: '',
+      url: innerProps.defaultUrl,
     },
     validate: zodResolver(
       z.object({

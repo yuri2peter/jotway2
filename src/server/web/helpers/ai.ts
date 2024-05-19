@@ -1,29 +1,11 @@
-import lodash from 'lodash';
-import axios from 'axios';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import db from 'src/server/data/db';
 
-const geminiApi =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro';
+const genAI = new GoogleGenerativeAI(db().get().settings.geminiKey);
+const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
 
-export async function generateContent(text: string): Promise<string> {
-  try {
-    const { data } = await axios.post(
-      geminiApi + ':generateContent?key=' + db().get().settings.geminiKey,
-      {
-        contents: [
-          {
-            parts: [
-              {
-                text,
-              },
-            ],
-          },
-        ],
-      }
-    );
-    return lodash.get(data, 'candidates[0].content.parts[0].text', '');
-  } catch (error) {
-    console.warn((error as any)?.response?.data);
-    return 'Generate content failed.';
-  }
+export async function generateContent(prompt: string): Promise<string> {
+  const { response } = await model.generateContent(prompt);
+  const text = response.text();
+  return text;
 }

@@ -12,7 +12,6 @@ import {
   IconWorldWww,
   IconPencil,
   IconTrash,
-  IconCheck,
   IconCopy,
   IconDotsVertical,
 } from '@tabler/icons-react';
