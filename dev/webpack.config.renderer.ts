@@ -160,11 +160,7 @@ const config: Configuration = {
       };
     })(),
     hot: true,
-    watchFiles: [
-      'src/common/**/*',
-      'src/renderer/**/*',
-      'dev/webpack.config.renderer.ts',
-    ],
+    watchFiles: ['dev/webpack.config.renderer.ts'],
     headers: { 'Access-Control-Allow-Origin': '*' },
     allowedHosts: DEV_RENDERER_ALLOWED_ALL_HOSTS ? 'all' : 'auto',
     static: [
