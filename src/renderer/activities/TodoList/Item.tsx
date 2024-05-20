@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Checkbox,
   Group,
@@ -17,33 +17,48 @@ const Item: React.FC<{
   onChange: (item: TodoItem) => void;
   onDelete: (itemId: string) => void;
 }> = ({ item, onChange, onDelete }) => {
-  const handleChange = useMemo(() => debounce(onChange, 500), [onChange]);
+  const [innerItem, setInnerItem] = useState(item);
+  const pushChanges = useMemo(() => debounce(onChange, 500), [onChange]);
+  const handleChange = useCallback(
+    (newItem: TodoItem) => {
+      setInnerItem(newItem);
+      pushChanges(newItem);
+    },
+    [pushChanges]
+  );
+  useEffect(() => {
+    setInnerItem(item);
+  }, [item]);
   return (
     <Group pr={'xl'} wrap="nowrap">
       <Checkbox
         size="lg"
         color="gray"
         variant="outline"
-        checked={item.completed}
+        checked={innerItem.completed}
         onChange={(e) =>
-          onChange({ ...item, completed: e.target.checked, updatedAt: now() })
+          handleChange({
+            ...innerItem,
+            completed: e.target.checked,
+            updatedAt: now(),
+          })
         }
       />
       <Stack gap={0} style={{ flex: 1 }}>
         <Input
-          style={{ opacity: !item.completed ? 1 : 0.4 }}
+          style={{ opacity: !innerItem.completed ? 1 : 0.4 }}
           variant="unstyled"
           size="md"
           placeholder="Task Name"
           spellCheck={false}
-          defaultValue={item.title}
+          value={innerItem.title}
           onChange={(e) => {
-            handleChange({ ...item, title: e.target.value });
+            handleChange({ ...innerItem, title: e.target.value });
           }}
         />
-        <Tooltip label={dayjs(item.updatedAt).format('MMM-DD HH:mm')}>
+        <Tooltip label={dayjs(innerItem.updatedAt).format('MMM-DD HH:mm')}>
           <Text size="xs" c="gray" lh={'inherit'}>
-            {dayjs(item.updatedAt).fromNow()}
+            {dayjs(innerItem.updatedAt).fromNow()}
           </Text>
         </Tooltip>
       </Stack>
