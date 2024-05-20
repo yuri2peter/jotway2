@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Stack, Text } from '@mantine/core';
+import { Divider, Stack, Text } from '@mantine/core';
 import { IpInfo } from 'src/common/type/ipInfo';
 import { getClientIpInfo, getServerIpInfo } from './request';
 import NetInfoCard from './NetInfoCard';
@@ -19,13 +19,16 @@ const NetworkTest: React.FC<{}> = () => {
   }, [getNetInfo]);
   return (
     <>
-      <Text c={'gray'}>A tools for testing network connection.</Text>
+      <Text c={'gray'}>
+        Test network connection for both client and server.
+      </Text>
       <Stack gap={'xl'} mt={'lg'}>
         {value?.clientIpInfo ? (
           <NetInfoCard ipInfo={value.clientIpInfo} title="Client" />
         ) : (
           <Text>Testing client network connection...</Text>
         )}
+        <Divider />
         {value?.serverIpInfo ? (
           <NetInfoCard ipInfo={value.serverIpInfo} title="Server" />
         ) : (

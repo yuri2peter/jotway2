@@ -12,7 +12,7 @@ import {
 } from '@mantine/core';
 import {
   IconWorldWww,
-  IconPencil,
+  IconEdit,
   IconTrash,
   IconCopy,
   IconDotsVertical,
@@ -36,13 +36,11 @@ const BookmarkItem: React.FC<{ bookmark: BookmarkShort }> = ({ bookmark }) => {
   const { deleteBookmark, analysisBookmark } = useGlobalStore((s) => s.actions);
   return (
     <Group wrap="nowrap" align="start">
-      <IconWorldWww stroke={1.5} />
       <Stack gap={'0'}>
         <Tooltip
-          // label={<MarkdownRender text={bookmark.snapshot} />}
           label={
             bookmark.screenshot ? (
-              <AspectRatio ratio={1440 / 900} maw={1440 / 2} w={'100vw'}>
+              <AspectRatio ratio={1440 / 900} maw={1440 / 4} w={'100vw'}>
                 <Image src={bookmark.screenshot} alt="screenshot" />
               </AspectRatio>
             ) : (
@@ -52,13 +50,24 @@ const BookmarkItem: React.FC<{ bookmark: BookmarkShort }> = ({ bookmark }) => {
           openDelay={500}
           closeDelay={100}
         >
-          <Anchor component={Link} to={bookmark.url} target="_blank">
-            {bookmark.name}
+          <Anchor
+            component={Link}
+            to={bookmark.url}
+            target="_blank"
+            c="violet.9"
+          >
+            <Text lineClamp={2}>
+              <IconWorldWww stroke={1.5} size={20} style={{ marginRight: 8 }} />
+              {bookmark.name}
+            </Text>
           </Anchor>
         </Tooltip>
         <Tooltip label={bookmark.summary} w={400} multiline openDelay={500}>
           <Text c="gray" lineClamp={2} size="sm">
-            {bookmark.summary}
+            <Text c="teal" size="sm" component="span">
+              {bookmark.analysing ? '[Analysing...] ' : ''}
+            </Text>
+            {(bookmark.analysing ? '[Analysing...] ' : '') + bookmark.summary}
           </Text>
         </Tooltip>
       </Stack>
@@ -88,7 +97,7 @@ const BookmarkItem: React.FC<{ bookmark: BookmarkShort }> = ({ bookmark }) => {
             )}
           </CopyButton>
           <Menu.Item
-            leftSection={<IconPencil {...iconProps} />}
+            leftSection={<IconEdit {...iconProps} />}
             onClick={() => {
               openContextModal({
                 modal: 'RenameBookmarkModal',

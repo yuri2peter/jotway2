@@ -1,5 +1,10 @@
 import { z } from 'zod';
-import { zodSafeString, zodSafeNumber, zodSafeArray } from '../utils/type';
+import {
+  zodSafeString,
+  zodSafeNumber,
+  zodSafeArray,
+  zodSafeBoolean,
+} from '../utils/type';
 
 export const BookmarkShortSchema = z.object({
   id: zodSafeString(),
@@ -11,6 +16,7 @@ export const BookmarkShortSchema = z.object({
   snapshot: zodSafeString(),
   screenshot: zodSafeString(),
   summary: zodSafeString(),
+  analysing: zodSafeBoolean(),
 });
 
 export const BookmarkSchema = BookmarkShortSchema.extend({

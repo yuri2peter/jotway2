@@ -15,7 +15,11 @@ import { useForm, zodResolver } from '@mantine/form';
 import { SettingsSchema } from 'src/common/type/settings';
 import { api, apiErrorHandler } from 'src/renderer/helpers/api';
 import { notifications } from '@mantine/notifications';
-import { IconStethoscope } from '@tabler/icons-react';
+import {
+  IconArrowBackUp,
+  IconDeviceFloppy,
+  IconStethoscope,
+} from '@tabler/icons-react';
 
 const Settings: React.FC<{}> = () => {
   const [loading, setLoading] = useState(true);
@@ -25,16 +29,17 @@ const Settings: React.FC<{}> = () => {
     initialValues: SettingsSchema.parse({}),
     validate: zodResolver(SettingsSchema),
   });
-  const { setValues } = form;
+  const { setValues, setInitialValues } = form;
   useEffect(() => {
     api()
       .post('/api/settings/get')
       .then(({ data }) => {
         setValues(data);
+        setInitialValues(data);
         setLoading(false);
       })
       .catch(apiErrorHandler);
-  }, [setValues]);
+  }, [setValues, setInitialValues]);
   return (
     <>
       <LoadingOverlay visible={loading} />
@@ -131,9 +136,18 @@ const Settings: React.FC<{}> = () => {
           </Stack>
         </Stack>
         <Group mt="xl">
-          <Button type="submit">Submit</Button>
-          <Button variant="outline" color="gray" onClick={async () => {}}>
-            Cancel
+          <Button type="submit" leftSection={<IconDeviceFloppy size={14} />}>
+            Submit
+          </Button>
+          <Button
+            variant="outline"
+            color="gray"
+            onClick={async () => {
+              form.reset();
+            }}
+            leftSection={<IconArrowBackUp size={14} />}
+          >
+            Reset
           </Button>
         </Group>
       </form>

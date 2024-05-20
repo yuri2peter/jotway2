@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Group, Text, TextInput } from '@mantine/core';
+import { Button, Group, Text, Textarea } from '@mantine/core';
 import { ContextModalProps } from '@mantine/modals';
 import { useGlobalStore } from 'src/renderer/store/useGlobalStore';
 import { z } from 'zod';
@@ -29,7 +29,7 @@ const CreateBookmarkModal = ({
         context.closeModal(id);
       })}
     >
-      <TextInput
+      <Textarea
         placeholder="https://foo.bar"
         label="URL"
         data-autofocus

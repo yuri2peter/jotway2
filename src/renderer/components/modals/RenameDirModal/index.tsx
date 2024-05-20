@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Group, TextInput } from '@mantine/core';
+import { Button, Group, Textarea } from '@mantine/core';
 import { ContextModalProps } from '@mantine/modals';
 import { useGlobalStore } from 'src/renderer/store/useGlobalStore';
 import { useForm, zodResolver } from '@mantine/form';
@@ -29,7 +29,7 @@ const RenameDirModal = ({
         context.closeModal(id);
       })}
     >
-      <TextInput
+      <Textarea
         placeholder=""
         label="New name"
         data-autofocus

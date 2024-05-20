@@ -1,8 +1,8 @@
-import { ActionIcon, Anchor, Group, Menu } from '@mantine/core';
+import { ActionIcon, Anchor, Group, Menu, Stack, Text } from '@mantine/core';
 import {
   IconFolder,
   IconDotsVertical,
-  IconPencil,
+  IconEdit,
   IconTrash,
 } from '@tabler/icons-react';
 import React from 'react';
@@ -21,10 +21,15 @@ const DirItem: React.FC<{ dir: Dir }> = ({ dir }) => {
   const { deleteDir } = useGlobalStore((s) => s.actions);
   return (
     <Group wrap="nowrap" align="start">
-      <IconFolder stroke={1.5} />
-      <Anchor component={Link} to={`/d/${dir.id}`}>
-        {dir.name}
-      </Anchor>
+      <Stack gap="0">
+        <Anchor component={Link} to={`/d/${dir.id}`} c="orange.9">
+          <IconFolder stroke={1.5} size={20} style={{ marginRight: 8 }} />
+          {dir.name}
+        </Anchor>
+        <Text c="gray" lineClamp={2} size="sm">
+          {/* N objects. */}
+        </Text>
+      </Stack>
       <FlexGrow />
       <Menu shadow="md" width={200} trigger="click-hover">
         <Menu.Target>
@@ -34,7 +39,7 @@ const DirItem: React.FC<{ dir: Dir }> = ({ dir }) => {
         </Menu.Target>
         <Menu.Dropdown>
           <Menu.Item
-            leftSection={<IconPencil {...iconProps} />}
+            leftSection={<IconEdit {...iconProps} />}
             onClick={() => {
               openContextModal({
                 modal: 'RenameDirModal',

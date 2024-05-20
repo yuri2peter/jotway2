@@ -51,14 +51,14 @@ const UploadZone: React.FC<{ onDrop: (files: File[]) => void }> = ({
               style={{
                 width: rem(52),
                 height: rem(52),
-                color: 'var(--mantine-color-dimmed)',
+                color: 'var(--mantine-color-gray-6)',
               }}
               stroke={1.5}
             />
           </Dropzone.Idle>
 
           <div>
-            <Text size="xl" inline>
+            <Text size="xl" inline c="gray.8">
               Drag files here or click to select files
             </Text>
             <Text size="sm" c="dimmed" inline mt={7}>

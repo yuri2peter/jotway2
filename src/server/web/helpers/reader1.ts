@@ -53,22 +53,11 @@ async function htmlReader(url: string) {
 }
 
 // parse url into title, description, icon, content
-export async function urlParser(url: string) {
-  const [snapshot, meta] = await Promise.all([
-    snapshotReader(url),
-    metaReader(url),
-  ]);
-  const summary = await generateContent(
-    'Summarize the content of this website in no more than one sentences.\n\n' +
-      JSON.stringify({
-        Title: meta.title,
-        Description: meta.description,
-        Snapshot: snapshot,
-      })
-  );
-  return {
-    meta,
-    summary,
-    snapshot,
-  };
+export async function urlParser1(url: string) {
+  // const [snapshot, meta] = await Promise.all([
+  //   snapshotReader(url),
+  //   metaReader(url),
+  // ]);
+  const meta = await metaReader(url);
+  return meta;
 }

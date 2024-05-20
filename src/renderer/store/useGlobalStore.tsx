@@ -216,18 +216,39 @@ export const useGlobalStore = createZustandStore(defaultStore, (set, get) => {
   };
   const createBookmark = async (url: string, parentId: string) => {
     try {
+      const id = nanoid();
+      if (get().currentDirId === parentId) {
+        set((d) => {
+          d.currentDirSubItems.bookmarkIds.unshift(id);
+          d.currentDirSubItems.bookmarkShorts.unshift(
+            BookmarkShortSchema.parse({
+              id,
+              url,
+              parentId,
+              name: url,
+              summary: '',
+              createdAt: now(),
+            })
+          );
+        });
+      }
       const { data: data1 } = await api().post('/api/bookmark/create-item', {
+        id,
         url,
         parentId,
       });
       const item1 = BookmarkShortSchema.parse(data1);
       if (get().currentDirId === parentId) {
         set((d) => {
-          d.currentDirSubItems.bookmarkIds.unshift(item1.id);
-          d.currentDirSubItems.bookmarkShorts.unshift(item1);
+          const prevItem = d.currentDirSubItems.bookmarkShorts.find(
+            (t) => t.id === id
+          );
+          if (prevItem) {
+            Object.assign(prevItem, item1);
+          }
         });
       }
-      await analysisBookmark(item1.id);
+      await analysisBookmark(id);
     } catch (error) {
       return apiErrorHandler(error);
     }
@@ -240,7 +261,7 @@ export const useGlobalStore = createZustandStore(defaultStore, (set, get) => {
         );
         if (prevItem) {
           Object.assign(prevItem, {
-            summary: 'Analysing...',
+            analysing: true,
           });
         }
       });

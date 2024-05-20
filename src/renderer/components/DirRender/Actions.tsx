@@ -4,7 +4,7 @@ import {
   IconWorldWww,
   IconFolder,
   IconNotes,
-  IconPencil,
+  IconEdit,
   IconTrash,
   IconDotsVertical,
 } from '@tabler/icons-react';
@@ -34,7 +34,7 @@ const Actions: React.FC<{}> = () => {
       </Menu.Target>
       <Menu.Dropdown>
         <Menu.Item
-          leftSection={<IconPencil {...iconProps} />}
+          leftSection={<IconEdit {...iconProps} />}
           onClick={() => {
             openContextModal({
               modal: 'RenameDirModal',

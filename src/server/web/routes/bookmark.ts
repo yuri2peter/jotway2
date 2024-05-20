@@ -1,19 +1,26 @@
 import db from 'src/server/data/db';
 import { Controller } from '../types/controller';
 import { z } from 'zod';
-import { BookmarkSchema } from 'src/common/type/bookmark';
-import { nanoid } from 'nanoid';
+import { Bookmark, BookmarkSchema } from 'src/common/type/bookmark';
 import { now } from 'lodash';
-import { urlParser } from '../helpers/reader2';
+import { urlParser2 } from '../helpers/reader2';
+import { urlParser1 } from '../helpers/reader1';
 
 const bookmark: Controller = (router) => {
   router.post('/api/bookmark/create-item', async (ctx) => {
-    const { url, parentId } = z
-      .object({ url: z.string().url(), parentId: z.string().min(1) })
+    const { id, url, parentId } = z
+      .object({
+        id: z.string().min(1),
+        url: z.string().url(),
+        parentId: z.string().min(1),
+      })
       .parse(ctx.request.body);
+    const { title, description } = await urlParser1(url);
     const item = BookmarkSchema.parse({
-      id: nanoid(),
-      name: new URL(url).hostname + new URL(url).pathname,
+      id,
+      name: title,
+      description,
+      summary: description,
       url,
       parentId,
       createdAt: now(),
@@ -32,23 +39,38 @@ const bookmark: Controller = (router) => {
       ctx.throw(404);
       return;
     }
-    const { title, summary, screenshot, description } = await urlParser(
-      item.url
-    );
-    const newItem = {
-      ...item,
-      name: title,
-      summary,
-      screenshot,
-      description,
-    };
     db().changeData((d) => {
       const dbItem = d.bookmarks.find((i) => i.id === id);
       if (dbItem) {
-        Object.assign(dbItem, newItem);
+        Object.assign(dbItem, { analysing: true });
       }
     });
-    ctx.body = newItem;
+    let itemPatch: Partial<Bookmark> = {};
+    try {
+      const { title, summary, screenshot, description } = await urlParser2(
+        item.url
+      );
+      itemPatch = {
+        name: title,
+        summary,
+        screenshot,
+        description,
+        analysing: false,
+      };
+    } catch (error) {
+      itemPatch = {
+        analysing: false,
+      };
+    }
+    db().changeData((d) => {
+      const dbItem = d.bookmarks.find((i) => i.id === id);
+      if (dbItem) {
+        Object.assign(dbItem, itemPatch);
+      }
+    });
+    ctx.body = db()
+      .get()
+      .bookmarks.find((t) => t.id === id)!;
   });
   router.post('/api/bookmark/delete-item', async (ctx) => {
     const { id } = z.object({ id: z.string() }).parse(ctx.request.body);

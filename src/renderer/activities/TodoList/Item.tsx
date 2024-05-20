@@ -33,7 +33,7 @@ const Item: React.FC<{
     <Group pr={'xl'} wrap="nowrap">
       <Checkbox
         size="lg"
-        color="gray"
+        color="teal"
         variant="outline"
         checked={innerItem.completed}
         onChange={(e) =>
@@ -46,7 +46,13 @@ const Item: React.FC<{
       />
       <Stack gap={0} style={{ flex: 1 }}>
         <Input
-          style={{ opacity: !innerItem.completed ? 1 : 0.4 }}
+          styles={{
+            input: {
+              color: innerItem.completed
+                ? 'var(--mantine-color-teal-7)'
+                : 'var(--mantine-color-indigo-7)',
+            },
+          }}
           variant="unstyled"
           size="md"
           placeholder="Task Name"

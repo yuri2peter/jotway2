@@ -24,6 +24,7 @@ const FileItem: React.FC<{ item: FileDropItem; onDelete: () => void }> = ({
     <Stack gap={0}>
       <Group wrap="nowrap">
         <Anchor
+          c={'violet'}
           href={downloadLink}
           target="_blank"
           // some how this doesn't work
