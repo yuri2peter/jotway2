@@ -5,6 +5,7 @@ import { sleep } from 'src/common/utils/time';
 import { runtimeUploadsPath } from 'src/common/paths.app';
 import { nanoid } from 'nanoid';
 import { UPLOADS_URL_PREFIX } from 'src/common/config';
+import db from 'src/server/data/db';
 
 // parse url into title, description, icon, content
 export async function urlParser(url: string) {
@@ -47,19 +48,22 @@ export async function urlParser(url: string) {
       return 'No description.';
     });
   await browser.close();
-  const prompt1 = `
-Summarize this webpage in two sentence based on the following information and screenshots of the webpage. 
-The summary must use the same language as the page's content.
-Information:`;
-  const prompt2 = `
-使用如下信息和网页截图来生成这个网页的摘要（不超过两句话）。必须使用和网页内容一样的语种。信息：`;
-  const summary = await generateContentWithImage(
-    prompt2 +
-      JSON.stringify({
+  const prompt = [
+    db().get().settings.bookmarkAnalysisTaskPrompt,
+    JSON.stringify(
+      {
         title,
         description,
-      }),
-    screenshotPath
+      },
+      null,
+      2
+    ),
+  ].join('\n\n');
+  const summary = await generateContentWithImage(prompt, screenshotPath).catch(
+    (e) => {
+      console.warn(e);
+      return 'Content generated failed.';
+    }
   );
   return {
     title,

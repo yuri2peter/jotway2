@@ -53,10 +53,12 @@ const bookmark: Controller = (router) => {
   router.post('/api/bookmark/delete-item', async (ctx) => {
     const { id } = z.object({ id: z.string() }).parse(ctx.request.body);
     db().changeData((d) => {
-      const item = d.bookmarks.find((i) => i.id === id);
-      if (item) {
-        item.parentId = 'recycle';
-      }
+      d.bookmarks = d.bookmarks.filter((i) => i.id !== id);
+      // Disable recycle feature for now
+      // const item = d.bookmarks.find((i) => i.id === id);
+      // if (item) {
+      //   item.parentId = 'recycle';
+      // }
     });
     ctx.body = { ok: 1 };
   });

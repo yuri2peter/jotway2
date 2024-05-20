@@ -36,16 +36,21 @@ const dir: Controller = (router) => {
       const subItems = findSubItems(subDir);
       db().changeData((d) => {
         d.dirs = d.dirs.filter((i) => i.id !== subDir.id);
-        d.notes
-          .filter((i) => subItems.noteIds.includes(i.id))
-          .forEach((i) => {
-            i.parentId = 'recycle';
-          });
-        d.bookmarks
-          .filter((i) => subItems.bookmarkIds.includes(i.id))
-          .forEach((i) => {
-            i.parentId = 'recycle';
-          });
+        d.notes = d.notes.filter((i) => !subItems.noteIds.includes(i.id));
+        d.bookmarks = d.bookmarks.filter(
+          (i) => !subItems.bookmarkIds.includes(i.id)
+        );
+        // Disable recycle feature for now
+        // d.notes
+        //   .filter((i) => subItems.noteIds.includes(i.id))
+        //   .forEach((i) => {
+        //     i.parentId = 'recycle';
+        //   });
+        // d.bookmarks
+        //   .filter((i) => subItems.bookmarkIds.includes(i.id))
+        //   .forEach((i) => {
+        //     i.parentId = 'recycle';
+        //   });
       });
     });
     ctx.body = { ok: 1 };

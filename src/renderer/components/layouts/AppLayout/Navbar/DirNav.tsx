@@ -6,7 +6,7 @@ import {
   IconFolder,
   IconFolderOpen,
   IconPlus,
-  IconRecycle,
+  // IconRecycle,
   IconStar,
 } from '@tabler/icons-react';
 import { iconProps } from './defines';
@@ -44,13 +44,13 @@ const DirNav: React.FC<{}> = () => {
         .map((t) => (
           <DirNavItem key={t.id} id={t.id} />
         ))}
-      <NavLink
+      {/* <NavLink
         label="Recycle Bin"
         leftSection={<IconRecycle {...iconProps} />}
         component={Link}
         to={'/d/recycle'}
         active={currentDirId === 'recycle'}
-      ></NavLink>
+      ></NavLink> */}
     </>
   );
 };
