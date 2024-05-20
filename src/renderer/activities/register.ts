@@ -7,11 +7,13 @@ import {
   IconSettings,
   IconTools,
   IconTerminal2,
+  IconNetwork,
 } from '@tabler/icons-react';
 import TodoList from './TodoList';
 import Jottings from './Jottings';
 import FileDrop from './FileDrop';
 import Settings from './Settings';
+import NetworkTest from './NetworkTest';
 
 // The registere table of activities
 export const activityRegister: Record<
@@ -49,5 +51,10 @@ export const activityRegister: Record<
     name: 'Settings',
     renderer: Settings,
     icon: IconSettings,
+  },
+  networkTest: {
+    name: 'Network Test',
+    renderer: NetworkTest,
+    icon: IconNetwork,
   },
 };

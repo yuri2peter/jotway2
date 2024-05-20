@@ -6,9 +6,10 @@ import fileDrop from './fileDrop';
 import dir from './dir';
 import bookmark from './bookmark';
 import settings from './settings';
+import miscs from './miscs';
 
 export default function handleRoutes(router: Router<any, {}>) {
-  [test, todo, jottings, fileDrop, dir, bookmark, settings].forEach((t) =>
-    t(router)
+  [test, todo, jottings, fileDrop, dir, bookmark, settings, miscs].forEach(
+    (t) => t(router)
   );
 }

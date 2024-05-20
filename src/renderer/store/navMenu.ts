@@ -43,6 +43,12 @@ export const navMenu: ActivityNavItems = [
     active: false,
   },
   {
+    id: 'networkTest',
+    parentId: 'system',
+    opened: false,
+    active: false,
+  },
+  {
     id: 'settings',
     parentId: 'system',
     opened: false,

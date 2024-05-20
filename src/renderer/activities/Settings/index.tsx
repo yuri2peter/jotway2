@@ -1,19 +1,25 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+  ActionIcon,
   Anchor,
   Button,
   Group,
+  LoadingOverlay,
   Stack,
   Text,
   TextInput,
   Textarea,
+  Tooltip,
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { SettingsSchema } from 'src/common/type/settings';
 import { api, apiErrorHandler } from 'src/renderer/helpers/api';
 import { notifications } from '@mantine/notifications';
+import { IconStethoscope } from '@tabler/icons-react';
 
 const Settings: React.FC<{}> = () => {
+  const [loading, setLoading] = useState(true);
+  const [checking1, setChecking1] = useState(false);
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: SettingsSchema.parse({}),
@@ -25,11 +31,13 @@ const Settings: React.FC<{}> = () => {
       .post('/api/settings/get')
       .then(({ data }) => {
         setValues(data);
+        setLoading(false);
       })
       .catch(apiErrorHandler);
   }, [setValues]);
   return (
     <>
+      <LoadingOverlay visible={loading} />
       <Text c={'gray'}>Configrations and customizations.</Text>
       <form
         onSubmit={form.onSubmit(async (values) => {
@@ -52,7 +60,7 @@ const Settings: React.FC<{}> = () => {
             label="Gemini AI Key"
             description={
               <>
-                The key could be applied from{' '}
+                The key could be applied here:{' '}
                 <Anchor
                   href="https://makersuite.google.com/app/apikey"
                   c="blue"
@@ -64,6 +72,41 @@ const Settings: React.FC<{}> = () => {
                   https://makersuite.google.com/app/apikey
                 </Anchor>
               </>
+            }
+            rightSection={
+              <Tooltip label="Check availability">
+                <ActionIcon
+                  variant="subtle"
+                  loading={checking1}
+                  onClick={() => {
+                    setChecking1(true);
+                    api()
+                      .post('/api/settings/check-ai-key', {
+                        key: form.getValues().geminiKey,
+                      })
+                      .then(({ data: { ok, error } }) => {
+                        if (ok) {
+                          notifications.show({
+                            message: 'Gemini AI Key available.',
+                            color: 'green',
+                          });
+                        } else {
+                          notifications.show({
+                            message: error,
+                            color: 'red',
+                            autoClose: false,
+                          });
+                        }
+                      })
+                      .catch(apiErrorHandler)
+                      .finally(() => {
+                        setChecking1(false);
+                      });
+                  }}
+                >
+                  <IconStethoscope size={16} />
+                </ActionIcon>
+              </Tooltip>
             }
             key={form.key('geminiKey')}
             {...form.getInputProps('geminiKey')}
