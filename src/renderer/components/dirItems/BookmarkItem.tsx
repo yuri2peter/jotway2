@@ -40,7 +40,7 @@ const BookmarkItem: React.FC<{ bookmark: BookmarkShort }> = ({ bookmark }) => {
         <Tooltip
           label={
             bookmark.screenshot ? (
-              <AspectRatio ratio={1440 / 900} maw={1440 / 4} w={'100vw'}>
+              <AspectRatio ratio={1440 / 900} maw={1440 / 2.5} w={'100vw'}>
                 <Image src={bookmark.screenshot} alt="screenshot" />
               </AspectRatio>
             ) : (

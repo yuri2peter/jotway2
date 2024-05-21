@@ -9,16 +9,15 @@ import {
   ActionIcon,
   rem,
 } from '@mantine/core';
-import { IconCheck, IconCopy } from '@tabler/icons-react';
+import { IconCheck, IconCopy, IconFile } from '@tabler/icons-react';
 import React from 'react';
 import { FileDropItem } from 'src/common/type/fileDrop';
 import { bytesToSize } from 'src/common/utils/string';
 import FlexGrow from 'src/renderer/components/miscs/FlexGrow';
+import { useFileDropStore } from './store';
 
-const FileItem: React.FC<{ item: FileDropItem; onDelete: () => void }> = ({
-  item,
-  onDelete,
-}) => {
+const FileItem: React.FC<{ item: FileDropItem }> = ({ item }) => {
+  const { deleteItem } = useFileDropStore((s) => s.actions);
   const downloadLink = window.location.origin + item.url;
   return (
     <Stack gap={0}>
@@ -27,13 +26,9 @@ const FileItem: React.FC<{ item: FileDropItem; onDelete: () => void }> = ({
           c={'violet'}
           href={downloadLink}
           target="_blank"
-          // some how this doesn't work
-          underline="always"
-          style={{
-            textDecoration: 'underline',
-          }}
           download={item.originalFilename}
         >
+          <IconFile stroke={1.5} size={20} style={{ marginRight: 4 }} />
           {item.originalFilename}
         </Anchor>
         <FlexGrow />
@@ -41,7 +36,7 @@ const FileItem: React.FC<{ item: FileDropItem; onDelete: () => void }> = ({
         <CopyButton value={downloadLink} timeout={2000}>
           {({ copied, copy }) => (
             <Tooltip
-              label={copied ? 'Copied' : 'Copy'}
+              label={copied ? 'Copied' : 'Copy link'}
               withArrow
               position="right"
             >
@@ -59,7 +54,11 @@ const FileItem: React.FC<{ item: FileDropItem; onDelete: () => void }> = ({
             </Tooltip>
           )}
         </CopyButton>
-        <CloseButton onClick={onDelete} />
+        <CloseButton
+          onClick={() => {
+            deleteItem(item.newFilename);
+          }}
+        />
       </Group>
     </Stack>
   );

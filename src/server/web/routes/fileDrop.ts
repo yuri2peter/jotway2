@@ -1,8 +1,11 @@
+import path from 'path';
+import fs from 'fs-extra';
 import db from 'src/server/data/db';
 import { Controller } from '../types/controller';
 import { z } from 'zod';
 import { saveUploads } from '../helpers/upload';
 import { FileDropItemSchema } from 'src/common/type/fileDrop';
+import { runtimeUploadsPath } from 'src/common/paths.app';
 
 const fileDrop: Controller = (router) => {
   router.post('/api/file-drop/get-list', async (ctx) => {
@@ -27,6 +30,8 @@ const fileDrop: Controller = (router) => {
       d.fileDrop = d.fileDrop.filter((i) => i.newFilename !== newFilename);
     });
     ctx.body = { ok: 1 };
+    // delete file from disk
+    fs.unlink(path.resolve(runtimeUploadsPath, newFilename)).catch(() => {});
   });
 };
 export default fileDrop;
