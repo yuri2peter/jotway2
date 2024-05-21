@@ -9,6 +9,7 @@ import {
   srcPath,
 } from '../src/common/paths.project';
 import TsconfigPathsPlugins from 'tsconfig-paths-webpack-plugin';
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
@@ -40,7 +41,18 @@ const config: Configuration = {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        use: 'babel-loader',
+        use: [
+          'babel-loader',
+          {
+            loader: 'babel-loader',
+            options: {
+              plugins: [
+                // eslint-disable-next-line node/no-unpublished-require
+                IS_DEV && require.resolve('react-refresh/babel'),
+              ].filter(Boolean),
+            },
+          },
+        ],
         exclude: /node_modules/,
       },
       {
@@ -125,6 +137,7 @@ const config: Configuration = {
     // @ts-ignore
     new LodashModuleReplacementPlugin(),
     IS_DEV ? false : new CleanWebpackPlugin(),
+    !IS_DEV ? false : new ReactRefreshWebpackPlugin(),
   ],
   devtool: IS_DEV ? 'inline-source-map' : false,
   resolve: {
